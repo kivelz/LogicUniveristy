@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using storemanagement.Models;
 
+
 namespace storemanagement.DAL
 {
     public partial class UserDAL
@@ -17,7 +18,19 @@ namespace storemanagement.DAL
         {
             return db.Employees.ToList();
         }
-
+        public bool Exist(Employee emp)
+        {
+            bool isValid;
+            if(db.Employees.Any(x => x.email.Equals(emp.email) && x.password.Equals(emp.password)))
+            {
+                isValid = true;
+            }
+            else
+            {
+                return false;
+            }
+            return isValid;
+        }
         //Find employee id
         public Employee FindById(int id)
         {

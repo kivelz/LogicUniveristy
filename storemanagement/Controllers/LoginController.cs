@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using storemanagement.Models;
 using storemanagement.DAL;
+using storemanagement.Ulti;
 
 namespace storemanagement.Controllers
 {
@@ -10,35 +11,34 @@ namespace storemanagement.Controllers
         // GET
         public ActionResult Index()
         {
-            return
-            View();
+            return  View();
         }
 
-        [HttpPost]
-        public ActionResult Login(int id, string password)
-        {
-            Employee emp = db.FindById(id);
 
-            if(!ModelState.IsValid)
+        [HttpPost]
+        public ActionResult Index(Employee model)
+        {
+            bool exist = db.Exist(model);
+
+            if (!ModelState.IsValid)
             {
-                return View(emp);
+                return View();
             }
 
             bool isValid = false;
+            model.password = Crypto.Hash(model.password);
 
-            if(emp.Id == id && emp.password == password)
+            if(exist)
             {
-                isValid = true;
+                return RedirectToAction("Index");
             }
 
-            if(!isValid)
+            else if (!isValid)
             {
                 ModelState.AddModelError("", "Invalid Username or Password");
-            } else
-            {
-                return RedirectToAction("Index", emp);
-            }
-            return View(emp);
+            } 
+                   
+            return View(model);
         }
     }
 }
