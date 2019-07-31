@@ -4,18 +4,69 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="storemodel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
-        <EntityContainer Name="storemodelTargetContainer" >
-        </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+    <Schema Namespace="storemodel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="storemodelStoreContainer">
+    <EntitySet Name="Suppliers" EntityType="storemodel.Store.Suppliers" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Departments" EntityType="storemodel.Store.Departments" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Catalogues" EntityType="storemodel.Store.Catalogues" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Employees" EntityType="storemodel.Store.Employees" store:Type="Tables" Schema="dbo" />
+  </EntityContainer>
+  <EntityType Name="Suppliers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="code" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="contact" Type="int" Nullable="false" />
+    <Property Name="fax" Type="int" Nullable="false" />
+    <Property Name="address" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Departments">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="dept_name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="contant_name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="phone" Type="int" Nullable="false" />
+    <Property Name="fax" Type="int" Nullable="false" />
+    <Property Name="dept_head" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="collection_point" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="representative_name" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Catalogues">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="item_code" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="catagory" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="reorder_level" Type="int" Nullable="false" />
+    <Property Name="reorder_qty" Type="int" Nullable="false" />
+    <Property Name="unit_of_measure" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Employees">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="email" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="phone" Type="int" Nullable="false" />
+    <Property Name="password" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="role" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+</Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="storemodel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
-        <EntityContainer Name="storemodelContainer" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="StoreManagement" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Suppliers" EntityType="storemodel.Supplier" />
           <EntitySet Name="Departments" EntityType="storemodel.Department" />
           <EntitySet Name="Catalogues" EntityType="storemodel.Catalogue" />
+          <EntitySet Name="Employees" EntityType="storemodel.Employee" />
         </EntityContainer>
         <EntityType Name="Supplier">
           <Key>
@@ -53,17 +104,76 @@
           <Property Name="reorder_qty" Type="Int32" Nullable="false" />
           <Property Name="unit_of_measure" Type="String" Nullable="false" />
         </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" />
+          <Property Name="email" Type="String" Nullable="false" />
+          <Property Name="phone" Type="Int32" Nullable="false" />
+          <Property Name="password" Type="String" Nullable="false" />
+          <Property Name="role" Type="String" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
-        <Alias Key="Model" Value="storemodel" />
-        <Alias Key="Target" Value="storemodel.Store" />
-        <EntityContainerMapping CdmEntityContainer="storemodelContainer" StorageEntityContainer="storemodelTargetContainer">
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="storemodelStoreContainer" CdmEntityContainer="StoreManagement">
+    <EntitySetMapping Name="Suppliers">
+      <EntityTypeMapping TypeName="IsTypeOf(storemodel.Supplier)">
+        <MappingFragment StoreEntitySet="Suppliers">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="code" ColumnName="code" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="contact" ColumnName="contact" />
+          <ScalarProperty Name="fax" ColumnName="fax" />
+          <ScalarProperty Name="address" ColumnName="address" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Departments">
+      <EntityTypeMapping TypeName="IsTypeOf(storemodel.Department)">
+        <MappingFragment StoreEntitySet="Departments">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="dept_name" ColumnName="dept_name" />
+          <ScalarProperty Name="contant_name" ColumnName="contant_name" />
+          <ScalarProperty Name="phone" ColumnName="phone" />
+          <ScalarProperty Name="fax" ColumnName="fax" />
+          <ScalarProperty Name="dept_head" ColumnName="dept_head" />
+          <ScalarProperty Name="collection_point" ColumnName="collection_point" />
+          <ScalarProperty Name="representative_name" ColumnName="representative_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Catalogues">
+      <EntityTypeMapping TypeName="IsTypeOf(storemodel.Catalogue)">
+        <MappingFragment StoreEntitySet="Catalogues">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="item_code" ColumnName="item_code" />
+          <ScalarProperty Name="catagory" ColumnName="catagory" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="reorder_level" ColumnName="reorder_level" />
+          <ScalarProperty Name="reorder_qty" ColumnName="reorder_qty" />
+          <ScalarProperty Name="unit_of_measure" ColumnName="unit_of_measure" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Employees">
+      <EntityTypeMapping TypeName="IsTypeOf(storemodel.Employee)">
+        <MappingFragment StoreEntitySet="Employees">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="phone" ColumnName="phone" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="role" ColumnName="role" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -77,6 +187,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
       </DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
