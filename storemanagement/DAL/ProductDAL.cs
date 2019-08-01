@@ -12,7 +12,7 @@ namespace storemanagement.DAL
 
         public List<Product> FindById(int id)
         {
-            return db.Products.Where(x => x.CategoryId == id).ToList();
+            return db.Products.ToArray().Where(x => x.CategoryId == id).ToList();
         }
     }
 }

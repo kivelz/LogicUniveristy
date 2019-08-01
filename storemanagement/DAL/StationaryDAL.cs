@@ -24,6 +24,11 @@ namespace storemanagement.DAL
         {
             return db.Categories.Where(x => x.Name == name).FirstOrDefault();
         }
+
+        public List<Category> GetAllCategories()
+        {
+            return db.Categories.ToList();
+        }
         
     }
 }

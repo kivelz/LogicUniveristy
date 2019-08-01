@@ -1,4 +1,4 @@
-﻿@model IEnumerable<storemanagement.Models.Product>
+﻿@model  storemanagement.Models.DAO.Shop
 
 @{
     ViewBag.Title = "Category";
@@ -10,42 +10,36 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
-    <tr>
-        <th>
-        
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.item_code)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CategoryId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-         
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.item_code)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CategoryId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+
+    @foreach (var item in Model.productList)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.item_code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+
+    }
+    @foreach (var item in Model.categoryList)
+    {
+        <tr>
+            <td> @Html.DisplayFor(modelItem => item.Name)</td>
+
+        </tr>
+    }
+
 
 </table>

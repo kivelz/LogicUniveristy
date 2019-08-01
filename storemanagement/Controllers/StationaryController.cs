@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using storemanagement.Models;
 using storemanagement.DAL;
+using storemanagement.Models.DAO;
 
 namespace storemanagement.Controllers
 {
@@ -21,17 +22,21 @@ namespace storemanagement.Controllers
 
         {
             List<Product> list;
+            List<Category> categories;
 
-           using(StoreManagement db = new StoreManagement())
-            {
-                Category cat = db.Categories.Where(x => x.Name == name).FirstOrDefault();
-                int catId = cat.Id;
+            categories = db.GetAllCategories();
+            Category cat = db.GetByCategory(name);
+            int catId = cat.Id;
 
-                list = db.Products.ToArray().Where(x => x.CategoryId == catId).ToList();
-                
+            list = db1.FindById(catId);
 
-            }
-            return View(list);
+            categories = db.GetAllCategories();
+
+            Shop shop = new Shop();
+            shop.categoryList = categories;
+            shop.productList = list;
+      
+            return View(shop);
         }
     }
 }
