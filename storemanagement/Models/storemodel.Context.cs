@@ -27,7 +27,8 @@ namespace storemanagement.Models
     
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
-        public virtual DbSet<Catalogue> Catalogues { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
     }
 }

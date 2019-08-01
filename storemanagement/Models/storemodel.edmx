@@ -8,8 +8,13 @@
   <EntityContainer Name="storemodelStoreContainer">
     <EntitySet Name="Suppliers" EntityType="storemodel.Store.Suppliers" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Departments" EntityType="storemodel.Store.Departments" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Catalogues" EntityType="storemodel.Store.Catalogues" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Products" EntityType="storemodel.Store.Products" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Employees" EntityType="storemodel.Store.Employees" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Categories" EntityType="storemodel.Store.Categories" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="ProductCategory" Association="storemodel.Store.ProductCategory">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="Category" EntitySet="Categories" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Suppliers">
     <Key>
@@ -35,17 +40,15 @@
     <Property Name="collection_point" Type="nvarchar(max)" Nullable="true" />
     <Property Name="representative_name" Type="nvarchar(max)" Nullable="true" />
   </EntityType>
-  <EntityType Name="Catalogues">
+  <EntityType Name="Products">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="item_code" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="catagory" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="description" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="reorder_level" Type="int" Nullable="false" />
-    <Property Name="reorder_qty" Type="int" Nullable="false" />
-    <Property Name="unit_of_measure" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CategoryId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Employees">
     <Key>
@@ -58,6 +61,25 @@
     <Property Name="password" Type="nvarchar(max)" Nullable="false" />
     <Property Name="role" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
+  <EntityType Name="Categories">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <Association Name="ProductCategory">
+    <End Role="Product" Type="storemodel.Store.Products" Multiplicity="*" />
+    <End Role="Category" Type="storemodel.Store.Categories" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -65,8 +87,13 @@
         <EntityContainer Name="StoreManagement" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Suppliers" EntityType="storemodel.Supplier" />
           <EntitySet Name="Departments" EntityType="storemodel.Department" />
-          <EntitySet Name="Catalogues" EntityType="storemodel.Catalogue" />
+          <EntitySet Name="Products" EntityType="storemodel.Product" />
           <EntitySet Name="Employees" EntityType="storemodel.Employee" />
+          <EntitySet Name="Categories" EntityType="storemodel.Category" />
+          <AssociationSet Name="ProductCategory" Association="storemodel.ProductCategory">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Category" EntitySet="Categories" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Supplier">
           <Key>
@@ -92,17 +119,15 @@
           <Property Name="collection_point" Type="String" Nullable="true" />
           <Property Name="representative_name" Type="String" Nullable="true" />
         </EntityType>
-        <EntityType Name="Catalogue">
+        <EntityType Name="Product">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
           <Property Name="item_code" Type="String" Nullable="false" />
-          <Property Name="catagory" Type="String" Nullable="false" />
-          <Property Name="description" Type="String" Nullable="false" />
-          <Property Name="reorder_level" Type="Int32" Nullable="false" />
-          <Property Name="reorder_qty" Type="Int32" Nullable="false" />
-          <Property Name="unit_of_measure" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -115,6 +140,29 @@
           <Property Name="password" Type="String" Nullable="false" />
           <Property Name="role" Type="String" Nullable="false" />
         </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="storemodel.ProductCategory" FromRole="Category" ToRole="Product" />
+        </EntityType>
+        <ComplexType Name="ComplexType1">
+          <Property Type="String" Name="description" Nullable="false" />
+        </ComplexType>
+        <Association Name="ProductCategory">
+          <End Type="storemodel.Product" Role="Product" Multiplicity="*" />
+          <End Type="storemodel.Category" Role="Category" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -147,16 +195,14 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Catalogues">
-      <EntityTypeMapping TypeName="IsTypeOf(storemodel.Catalogue)">
-        <MappingFragment StoreEntitySet="Catalogues">
+    <EntitySetMapping Name="Products">
+      <EntityTypeMapping TypeName="IsTypeOf(storemodel.Product)">
+        <MappingFragment StoreEntitySet="Products">
           <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="item_code" ColumnName="item_code" />
-          <ScalarProperty Name="catagory" ColumnName="catagory" />
-          <ScalarProperty Name="description" ColumnName="description" />
-          <ScalarProperty Name="reorder_level" ColumnName="reorder_level" />
-          <ScalarProperty Name="reorder_qty" ColumnName="reorder_qty" />
-          <ScalarProperty Name="unit_of_measure" ColumnName="unit_of_measure" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -169,6 +215,14 @@
           <ScalarProperty Name="phone" ColumnName="phone" />
           <ScalarProperty Name="password" ColumnName="password" />
           <ScalarProperty Name="role" ColumnName="role" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="IsTypeOf(storemodel.Category)">
+        <MappingFragment StoreEntitySet="Categories">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

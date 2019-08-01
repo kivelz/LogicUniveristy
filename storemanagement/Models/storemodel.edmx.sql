@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 07/31/2019 18:20:05
+-- Date Created: 08/01/2019 15:50:51
 -- Generated from EDMX file: C:\Users\kivel\source\repos\storemanagement\storemanagement\Models\storemodel.edmx
 -- --------------------------------------------------
 
@@ -28,11 +28,14 @@ GO
 IF OBJECT_ID(N'[dbo].[Departments]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Departments];
 GO
-IF OBJECT_ID(N'[dbo].[Catalogues]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Catalogues];
+IF OBJECT_ID(N'[dbo].[Products]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Products];
 GO
 IF OBJECT_ID(N'[dbo].[Employees]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Employees];
+GO
+IF OBJECT_ID(N'[dbo].[Categories]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Categories];
 GO
 
 -- --------------------------------------------------
@@ -63,15 +66,13 @@ CREATE TABLE [dbo].[Departments] (
 );
 GO
 
--- Creating table 'Catalogues'
-CREATE TABLE [dbo].[Catalogues] (
+-- Creating table 'Products'
+CREATE TABLE [dbo].[Products] (
     [Id] int IDENTITY(1,1) NOT NULL,
+    [Name] nvarchar(max)  NOT NULL,
     [item_code] nvarchar(max)  NOT NULL,
-    [catagory] nvarchar(max)  NOT NULL,
-    [description] nvarchar(max)  NOT NULL,
-    [reorder_level] int  NOT NULL,
-    [reorder_qty] int  NOT NULL,
-    [unit_of_measure] nvarchar(max)  NOT NULL
+    [Description] nvarchar(max)  NOT NULL,
+    [CategoryId] int  NOT NULL
 );
 GO
 
@@ -83,6 +84,13 @@ CREATE TABLE [dbo].[Employees] (
     [phone] int  NOT NULL,
     [password] nvarchar(max)  NOT NULL,
     [role] nvarchar(max)  NOT NULL
+);
+GO
+
+-- Creating table 'Categories'
+CREATE TABLE [dbo].[Categories] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Name] nvarchar(max)  NOT NULL
 );
 GO
 
@@ -102,9 +110,9 @@ ADD CONSTRAINT [PK_Departments]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'Catalogues'
-ALTER TABLE [dbo].[Catalogues]
-ADD CONSTRAINT [PK_Catalogues]
+-- Creating primary key on [Id] in table 'Products'
+ALTER TABLE [dbo].[Products]
+ADD CONSTRAINT [PK_Products]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -114,9 +122,30 @@ ADD CONSTRAINT [PK_Employees]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
+-- Creating primary key on [Id] in table 'Categories'
+ALTER TABLE [dbo].[Categories]
+ADD CONSTRAINT [PK_Categories]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
 -- --------------------------------------------------
 -- Creating all FOREIGN KEY constraints
 -- --------------------------------------------------
+
+-- Creating foreign key on [CategoryId] in table 'Products'
+ALTER TABLE [dbo].[Products]
+ADD CONSTRAINT [FK_ProductCategory]
+    FOREIGN KEY ([CategoryId])
+    REFERENCES [dbo].[Categories]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_ProductCategory'
+CREATE INDEX [IX_FK_ProductCategory]
+ON [dbo].[Products]
+    ([CategoryId]);
+GO
 
 -- --------------------------------------------------
 -- Script has ended

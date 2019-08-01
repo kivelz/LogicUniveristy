@@ -7,8 +7,10 @@
       <Diagram DiagramId="0201d20965b54f31aa6ebf3b655df664" Name="Diagram1" >
         <EntityTypeShape EntityType="storemodel.Supplier" Width="1.5" PointX="2.75" PointY="2.75" />
         <EntityTypeShape EntityType="storemodel.Department" Width="1.5" PointX="4.625" PointY="2.75" />
-        <EntityTypeShape EntityType="storemodel.Catalogue" Width="1.5" PointX="9.5" PointY="3.875" />
+        <EntityTypeShape EntityType="storemodel.Product" Width="1.75" PointX="7.375" PointY="4.125" />
         <EntityTypeShape EntityType="storemodel.Employee" Width="1.5" PointX="3.125" PointY="5.75" />
+        <EntityTypeShape EntityType="storemodel.Category" Width="1.5" PointX="9.75" PointY="3.875" />
+        <AssociationConnector Association="storemodel.ProductCategory" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
