@@ -12,11 +12,10 @@ namespace storemanagement.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Product
+    public partial class Collection
     {
         public int Id { get; set; }
-        public string item_code { get; set; }
-        public string Description { get; set; }
-        public int CategoryId { get; set; }
+        public string CollectIonPoint { get; set; }
+        public string Representive_Name { get; set; }
     }
 }

@@ -20,5 +20,8 @@ namespace storemanagement.Models
         public int phone { get; set; }
         public string password { get; set; }
         public string role { get; set; }
+        public int DepartmentId { get; set; }
+    
+        public virtual Department Department { get; set; }
     }
 }

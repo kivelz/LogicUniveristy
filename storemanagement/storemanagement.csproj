@@ -145,19 +145,28 @@
     <Compile Include="Models\Category.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Collection.cs">
+      <DependentUpon>storemodel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ComplexType1.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Shop.cs" />
     <Compile Include="Models\Department.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Employee.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Manager.cs">
+      <DependentUpon>storemodel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Product.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Request.cs">
+      <DependentUpon>storemodel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Shop.cs" />
     <Compile Include="Models\storemodel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

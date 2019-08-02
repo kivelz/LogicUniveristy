@@ -12,23 +12,23 @@ namespace storemanagement.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Department
+    public partial class Request
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Department()
+        public Request()
         {
-            this.Employees = new HashSet<Employee>();
+            this.Products = new HashSet<Product>();
         }
     
         public int Id { get; set; }
-        public string dept_name { get; set; }
-        public string contact_name { get; set; }
-        public int phone { get; set; }
-        public int fax { get; set; }
-        public string dept_head { get; set; }
+        public int empId { get; set; }
+        public int deptId { get; set; }
+        public System.DateTime approvalDate { get; set; }
+        public string remarks { get; set; }
+        public string status { get; set; }
     
+        public virtual Employee Employee { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Employee> Employees { get; set; }
-        public virtual Collection Collection { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
     }
 }
