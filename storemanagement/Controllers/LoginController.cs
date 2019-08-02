@@ -18,22 +18,22 @@ namespace storemanagement.Controllers
         [HttpPost]
         public ActionResult Index(Employee model)
         {
-            bool exist = db.Exist(model);
+            var userDetails = db.EmployeeDetails(model);
 
             if (!ModelState.IsValid)
             {
                 return View();
             }
 
-            bool isValid = false;
             model.password = Crypto.Hash(model.password);
 
-            if(exist)
+            if(userDetails != null)
             {
+                Session["UserId"] = userDetails.Id;
                 return RedirectToAction("Index");
             }
 
-            else if (!isValid)
+            else 
             {
                 ModelState.AddModelError("", "Invalid Username or Password");
             } 

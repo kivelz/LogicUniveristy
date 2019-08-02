@@ -12,17 +12,10 @@ namespace storemanagement.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Product
+    public partial class Units
     {
         public int Id { get; set; }
-        public string item_code { get; set; }
-        public string Description { get; set; }
-        public int CategoryId { get; set; }
-        public int reorderLvl { get; set; }
-        public int reorderQty { get; set; }
-        public int balance { get; set; }
-        public int UnitsId { get; set; }
-    
-        public virtual Units Unit { get; set; }
+        public string name { get; set; }
+        public int qty { get; set; }
     }
 }

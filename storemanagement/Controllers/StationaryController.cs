@@ -23,20 +23,34 @@ namespace storemanagement.Controllers
         {
             List<Product> list;
             List<Category> categories;
+            Shop shop;
 
-            categories = db.GetAllCategories();
+                   
             Category cat = db.GetByCategory(name);
             int catId = cat.Id;
 
-            list = db1.FindById(catId);
+            if(catId == 0)
+            {
+               categories = db.GetAllCategories();
+                list = db1.GetAllProduct();
 
-            categories = db.GetAllCategories();
+                shop = new Shop();
+                shop.categoryList = categories;
+                shop.productList = list;
+                return View(shop);
+            } else
+            {
+                categories = db.GetAllCategories();
+                list = db1.FindById(catId);
 
-            Shop shop = new Shop();
-            shop.categoryList = categories;
-            shop.productList = list;
-      
-            return View(shop);
+                categories = db.GetAllCategories();
+
+                shop = new Shop();
+                shop.categoryList = categories;
+                shop.productList = list;
+
+                return View(shop);
+            }   
         }
     }
 }

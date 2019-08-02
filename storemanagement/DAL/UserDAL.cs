@@ -18,18 +18,12 @@ namespace storemanagement.DAL
         {
             return db.Employees.ToList();
         }
-        public bool Exist(Employee emp)
+        public Employee EmployeeDetails(Employee emp)
         {
-            bool isValid;
-            if(db.Employees.Any(x => x.email.Equals(emp.email) && x.password.Equals(emp.password)))
-            {
-                isValid = true;
-            }
-            else
-            {
-                return false;
-            }
-            return isValid;
+            var userDetails = db.Employees.Where(x => x.email == emp.email && x.password == emp.password);
+
+            return (Employee) userDetails;
+            
         }
         //Find employee id
         public Employee FindById(int id)

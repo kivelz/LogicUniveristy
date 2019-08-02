@@ -14,5 +14,9 @@ namespace storemanagement.DAL
         {
             return db.Products.ToArray().Where(x => x.CategoryId == id).ToList();
         }
+        public List<Product> GetAllProduct()
+        {
+            return db.Products.ToList();
+        }
     }
 }
