@@ -18,5 +18,9 @@ namespace storemanagement.DAL
         {
             return db.Products.ToList();
         }
+        public Product Find(int id)
+        {
+            return db.Products.Find(id);
+        }
     }
 }

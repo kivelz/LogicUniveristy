@@ -7,7 +7,7 @@
 
 
 <div class="container">
-   
+
     <div class="col-md-3">
         <h2>Category</h2>
         @foreach (var item in Model.categoryList)
@@ -30,10 +30,19 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
+                    <td>
+                        <a href="#" class="incrproduct" data-id="@item.Id">+</a>
+                        <a href="#" class="decrproduct" data-id="@item.Id">-</a>
+                        <a href="#" class="removeprod" data-id="@item.Id">Remove</a>
+                    </td>
+                    <td class="qty@(item.Id)">
+                      0
+                    </td>
 
                     <td>
-                        <button>Order</button>
+                        <button onclick="return addToCart({id: @item.Id})">Order</button>
                     </td>
+
                 </tr>
 
             }
@@ -42,4 +51,18 @@
     </div>
 
 </div>
+@section scripts {
+    <script>
+        function addToCart(product) {
+            var url = "/cart/AddToCart";
+            $.get(url,
+                { id: product.id },
+                function (data) {
+                    $(".ajaxCart").html(data);
+                }).done(function () {
+                    //addshits
+                });
+        }
+    </script>
 
+}

@@ -1,0 +1,101 @@
+﻿@model IEnumerable<storemanagement.Models.DTO.RequestItemDTO>
+
+@if (ViewBag.Message != null)
+{
+    <h3>@ViewBag.Message</h3>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Qty)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductDescription)
+                </td>
+                <td class="qty@(item.ProductId)">
+                    @Html.DisplayFor(modelItem => item.Qty)
+                </td>
+                <td>
+                    <a href="#" class="incrproduct" data-id="@item.ProductId">+</a>
+                    <a href="#" class="decrproduct" data-id="@item.ProductId">-</a>
+                    <a href="#" class="removeprod" data-id="@item.ProductId">Remove</a>
+                </td>
+
+            </tr>
+        }
+
+    </table>
+}
+
+@section scripts {
+
+    <script>
+        
+        /*
+    * Increment product
+    */
+
+        $(function () {
+            $(".incrproduct").click(function (e) {
+                e.preventDefault();
+                var productId = $(this).data("id");
+                var url = "/cart/ProdIncrement";
+                $.getJSON(url,
+                    { productId: productId },
+                    function (data) {
+                        $(".qty" + productId).html(data.qty);
+                    }).done(function (data) {
+                    //add something if succeeded
+                });
+            });
+        });
+
+        $(".decrproduct").click(function (e) {
+            e.preventDefault();
+            var parentDiv = $(this);
+            var productId = $(this).data("id");
+            var url = "/cart/ProdDecrement";
+            $.getJSON(url,
+                { productId: productId },
+                function (data) {
+                    if (data.qty === 0) {
+                        parentDiv.parent().fadeOut("fast",
+                            function() {
+                                location.reload();
+                            });
+                    } else {
+                        $(".qty" + productId).html(data.qty);
+
+                    }
+                }).done(function (data) {
+                    //do something if succeed
+                });
+        });
+    </script>
+
+}
+
+
