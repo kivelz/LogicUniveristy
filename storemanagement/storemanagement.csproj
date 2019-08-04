@@ -155,7 +155,7 @@
     <Compile Include="Models\Department.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DTO\RequestItemDTO.cs" />
+    <Compile Include="Models\DTO\RequisitionDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>

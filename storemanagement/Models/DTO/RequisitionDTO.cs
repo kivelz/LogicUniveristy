@@ -5,7 +5,7 @@ using System.Web;
 
 namespace storemanagement.Models.DTO
 {
-    public class RequestItemDTO
+    public class RequisitionDTO
     {
         public int ProductId { get; set; }
         public string ProductCode { get; set; }

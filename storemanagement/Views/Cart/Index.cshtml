@@ -1,4 +1,4 @@
-﻿@model IEnumerable<storemanagement.Models.DTO.RequestItemDTO>
+﻿@model IEnumerable<storemanagement.Models.DTO.RequisitionDTO>
 
 @if (ViewBag.Message != null)
 {
@@ -41,7 +41,7 @@ else
                 <td>
                     <a href="#" class="incrproduct" data-id="@item.ProductId">+</a>
                     <a href="#" class="decrproduct" data-id="@item.ProductId">-</a>
-                    <a href="#" class="removeprod" data-id="@item.ProductId">Remove</a>
+                    <a href="#" class="removeProduct" data-id="@item.ProductId">Remove</a>
                 </td>
 
             </tr>
@@ -92,6 +92,17 @@ else
                     }
                 }).done(function (data) {
                     //do something if succeed
+                });
+        });
+
+        $(".removeProduct").click(function(e) {
+            e.preventDefault();
+            var productId = $(this).data("id");
+            var url = "/cart/RemoveProduct";
+            $.get(url,
+                { productId: productId },
+                function(data) {
+                    location.reload();
                 });
         });
     </script>

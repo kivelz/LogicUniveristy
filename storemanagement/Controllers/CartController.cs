@@ -17,7 +17,7 @@ namespace storemanagement.Controllers
         public ActionResult Index()
         {
            
-            var cart = Session["cart"] as List<RequestItemDTO> ?? new List<RequestItemDTO>();
+            var cart = Session["cart"] as List<RequisitionDTO> ?? new List<RequisitionDTO>();
 
           
             if (cart.Count == 0 || Session["cart"] == null)
@@ -42,12 +42,12 @@ namespace storemanagement.Controllers
         public ActionResult CartPartial()
         {
 
-            RequestItemDTO request = new RequestItemDTO();
+            RequisitionDTO request = new RequisitionDTO();
             int qty = 0;
     
             if (Session["cart"] != null)
             {
-                var list = (List<RequestItemDTO>)Session["cart"];
+                var list = (List<RequisitionDTO>)Session["cart"];
 
           
                 foreach (var item in list)
@@ -67,12 +67,12 @@ namespace storemanagement.Controllers
         public ActionResult AddToCart(int id)
         {
           //POst cart
-            List<RequestItemDTO> cart = Session["cart"] as List<RequestItemDTO> ?? new List<RequestItemDTO>();
+            List<RequisitionDTO> cart = Session["cart"] as List<RequisitionDTO> ?? new List<RequisitionDTO>();
       
 
             // Init CartVM
-            RequestItemDTO model = new RequestItemDTO();
-            string SessionId = HttpContext.Session.SessionID;
+            RequisitionDTO model = new RequisitionDTO();
+           
 
             // Get the product
             Product product = db.Find(id);
@@ -82,7 +82,7 @@ namespace storemanagement.Controllers
 
             if (productInCart == null)
             {
-                cart.Add(new RequestItemDTO()
+                cart.Add(new RequisitionDTO()
                 {
                     ProductId = product.Id,
                     ProductCode = product.item_code,
@@ -107,8 +107,7 @@ namespace storemanagement.Controllers
             foreach (var item in cart)
             {
                 qty += item.Qty;
-                Debug.WriteLine(SessionId);
-                
+
             }
 
             model.Qty = qty;
@@ -122,9 +121,9 @@ namespace storemanagement.Controllers
 
         public JsonResult ProdIncrement(int productId)
         {
-            List<RequestItemDTO> cart = Session["cart"] as List<RequestItemDTO>;
+            List<RequisitionDTO> cart = Session["cart"] as List<RequisitionDTO>;
 
-             RequestItemDTO item = cart.FirstOrDefault(x => x.ProductId == productId);
+             RequisitionDTO item = cart.FirstOrDefault(x => x.ProductId == productId);
 
              if (item != null)
              {
@@ -140,9 +139,9 @@ namespace storemanagement.Controllers
         //Produce decrement
         public JsonResult ProdDecrement(int productId)
         {
-            List<RequestItemDTO> cart = Session["cart"] as List<RequestItemDTO>;
+            List<RequisitionDTO> cart = Session["cart"] as List<RequisitionDTO>;
 
-            RequestItemDTO item = (cart ?? throw new InvalidOperationException()).FirstOrDefault(x => x.ProductId == productId);
+            RequisitionDTO item = (cart ?? throw new InvalidOperationException()).FirstOrDefault(x => x.ProductId == productId);
 
             if (item.Qty > 1)
             {
@@ -157,6 +156,16 @@ namespace storemanagement.Controllers
             var result = new {qty = item.Qty};
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public void RemoveProduct(int productId)
+        {
+            List<RequisitionDTO> cart = Session["cart"] as List<RequisitionDTO>;
+
+            RequisitionDTO item = (cart ?? throw new InvalidOperationException()).FirstOrDefault(x => x.ProductId == productId);
+
+            cart.Remove(item);
+
         }
     }
 }
