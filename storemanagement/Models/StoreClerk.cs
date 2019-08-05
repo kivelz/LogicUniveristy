@@ -12,10 +12,7 @@ namespace storemanagement.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class RequestItem
+    public partial class StoreClerk : Employee
     {
-        public int Id { get; set; }
-        public string name { get; set; }
-        public int qty { get; set; }
     }
 }

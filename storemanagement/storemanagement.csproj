@@ -168,10 +168,13 @@
     <Compile Include="Models\Request.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\RequestItem.cs">
+    <Compile Include="Models\Role.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Shop.cs" />
+    <Compile Include="Models\StoreClerk.cs">
+      <DependentUpon>storemodel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\storemodel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -186,6 +189,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>storemodel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Supervisor.cs">
+      <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Supplier.cs">
       <DependentUpon>storemodel.tt</DependentUpon>

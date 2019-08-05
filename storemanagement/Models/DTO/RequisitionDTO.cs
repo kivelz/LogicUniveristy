@@ -11,7 +11,7 @@ namespace storemanagement.Models.DTO
         public string ProductCode { get; set; }
         public string ProductDescription { get; set; }
         public int Qty { get; set; }
-        public int Metric { get; set; }
+        public string Metric { get; set; }
 
     }
 }

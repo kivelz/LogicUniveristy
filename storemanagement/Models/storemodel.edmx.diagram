@@ -6,22 +6,27 @@
     <edmx:Diagrams>
       <Diagram DiagramId="0201d20965b54f31aa6ebf3b655df664" Name="Diagram1" ZoomLevel="97" >
         <EntityTypeShape EntityType="storemodel.Supplier" Width="1.5" PointX="0.75" PointY="3.75" />
-        <EntityTypeShape EntityType="storemodel.Department" Width="1.5" PointX="9.875" PointY="4.625" />
+        <EntityTypeShape EntityType="storemodel.Department" Width="1.5" PointX="9.875" PointY="3.375" />
         <EntityTypeShape EntityType="storemodel.Product" Width="1.75" PointX="6.75" PointY="0.875" />
         <EntityTypeShape EntityType="storemodel.Employee" Width="1.5" PointX="6.625" PointY="4.625" />
         <EntityTypeShape EntityType="storemodel.Category" Width="1.5" PointX="9.25" PointY="0.875" />
         <AssociationConnector Association="storemodel.ProductCategory" />
-        <EntityTypeShape EntityType="storemodel.Collection" Width="1.5" PointX="13.625" PointY="4.25" />
+        <EntityTypeShape EntityType="storemodel.Collection" Width="1.5" PointX="15.5" PointY="5.75" />
         <AssociationConnector Association="storemodel.EmployeeDepartment" />
         <AssociationConnector Association="storemodel.DepartmentCollection" />
-        <EntityTypeShape EntityType="storemodel.Manager" Width="1.5" PointX="6.5" PointY="7.75" />
+        <EntityTypeShape EntityType="storemodel.Manager" Width="1.5" PointX="5.375" PointY="8.125" />
         <InheritanceConnector EntityType="storemodel.Manager" />
         <EntityTypeShape EntityType="storemodel.Request" Width="1.5" PointX="3.625" PointY="5.375" />
         <AssociationConnector Association="storemodel.EmployeeRequest" />
         <AssociationConnector Association="storemodel.RequestProduct" />
         <EntityTypeShape EntityType="storemodel.Units" Width="1.5" PointX="2.25" PointY="0.625" />
         <AssociationConnector Association="storemodel.UnitsProduct" />
-        <EntityTypeShape EntityType="storemodel.RequestItem" PointX="0.75" PointY="6.75" Width="1.5" />
+        <EntityTypeShape EntityType="storemodel.StoreClerk" Width="1.5" PointX="7.375" PointY="8.125" />
+        <InheritanceConnector EntityType="storemodel.StoreClerk" />
+        <EntityTypeShape EntityType="storemodel.Supervisor" Width="1.5" PointX="9.75" PointY="8.125" />
+        <InheritanceConnector EntityType="storemodel.Supervisor" />
+        <EntityTypeShape EntityType="storemodel.Role" Width="1.5" PointX="12" PointY="2.875" />
+        <AssociationConnector Association="storemodel.EmployeeRole" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

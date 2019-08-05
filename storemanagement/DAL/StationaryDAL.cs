@@ -22,7 +22,7 @@ namespace storemanagement.DAL
         }
         public Category GetByCategory(string name)
         {
-            return db.Categories.Where(x => x.Name == name).FirstOrDefault();
+            return db.Categories.FirstOrDefault(x => x.Name == name);
         }
 
         public List<Category> GetAllCategories()

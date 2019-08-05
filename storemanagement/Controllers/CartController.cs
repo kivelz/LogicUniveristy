@@ -87,7 +87,7 @@ namespace storemanagement.Controllers
                     ProductId = product.Id,
                     ProductCode = product.item_code,
                     ProductDescription = product.Description,
-                    Metric = product.UnitsId,
+                    Metric = product.Unit.name,
                     Qty = 1,
                   
                 });
@@ -166,6 +166,15 @@ namespace storemanagement.Controllers
 
             cart.Remove(item);
 
+        }
+
+        [HttpPost]
+        public void RequestOrder()
+        {
+            List<RequisitionDTO> request = Session["cart"] as List<RequisitionDTO>;
+
+            var details = Session["UserId"];
+            Debug.WriteLine(details);
         }
     }
 }

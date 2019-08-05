@@ -14,8 +14,10 @@
     <EntitySet Name="Employees" EntityType="storemodel.Store.Employees" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Requests" EntityType="storemodel.Store.Requests" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Units" EntityType="storemodel.Store.Units" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="RequestItems" EntityType="storemodel.Store.RequestItems" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Roles" EntityType="storemodel.Store.Roles" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Employees_Manager" EntityType="storemodel.Store.Employees_Manager" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Employees_StoreClerk" EntityType="storemodel.Store.Employees_StoreClerk" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Employees_Supervisor" EntityType="storemodel.Store.Employees_Supervisor" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="RequestProduct" EntityType="storemodel.Store.RequestProduct" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="ProductCategory" Association="storemodel.Store.ProductCategory">
       <End Role="Product" EntitySet="Products" />
@@ -45,9 +47,21 @@
       <End Role="Units" EntitySet="Units" />
       <End Role="Product" EntitySet="Products" />
     </AssociationSet>
+    <AssociationSet Name="EmployeeRole" Association="storemodel.Store.EmployeeRole">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="Role" EntitySet="Roles" />
+    </AssociationSet>
     <AssociationSet Name="FK_Manager_inherits_Employee" Association="storemodel.Store.FK_Manager_inherits_Employee">
       <End Role="Employee" EntitySet="Employees" />
       <End Role="Manager" EntitySet="Employees_Manager" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StoreClerk_inherits_Employee" Association="storemodel.Store.FK_StoreClerk_inherits_Employee">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="StoreClerk" EntitySet="Employees_StoreClerk" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Supervisor_inherits_Employee" Association="storemodel.Store.FK_Supervisor_inherits_Employee">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="Supervisor" EntitySet="Employees_Supervisor" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Suppliers">
@@ -85,6 +99,7 @@
     <Property Name="reorderQty" Type="int" Nullable="false" />
     <Property Name="balance" Type="int" Nullable="false" />
     <Property Name="UnitsId" Type="int" Nullable="false" />
+    <Property Name="price" Type="float" Nullable="false" />
   </EntityType>
   <EntityType Name="Categories">
     <Key>
@@ -110,8 +125,8 @@
     <Property Name="email" Type="nvarchar(max)" Nullable="false" />
     <Property Name="phone" Type="int" Nullable="false" />
     <Property Name="password" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="role" Type="nvarchar(max)" Nullable="false" />
     <Property Name="DepartmentId" Type="int" Nullable="false" />
+    <Property Name="RoleId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Requests">
     <Key>
@@ -133,15 +148,26 @@
     <Property Name="name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="qty" Type="int" Nullable="false" />
   </EntityType>
-  <EntityType Name="RequestItems">
+  <EntityType Name="Roles">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="qty" Type="int" Nullable="false" />
+    <Property Name="roleName" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <EntityType Name="Employees_Manager">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Employees_StoreClerk">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Employees_Supervisor">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
@@ -215,6 +241,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="EmployeeRole">
+    <End Role="Employee" Type="storemodel.Store.Employees" Multiplicity="*" />
+    <End Role="Role" Type="storemodel.Store.Roles" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Employee">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_RequestProduct_Request">
     <End Role="Request" Type="storemodel.Store.Requests" Multiplicity="1" />
     <End Role="RequestProduct" Type="storemodel.Store.RequestProduct" Multiplicity="*" />
@@ -249,6 +287,34 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="Manager">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StoreClerk_inherits_Employee">
+    <End Role="Employee" Type="storemodel.Store.Employees" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="StoreClerk" Type="storemodel.Store.Employees_StoreClerk" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="StoreClerk">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Supervisor_inherits_Employee">
+    <End Role="Employee" Type="storemodel.Store.Employees" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Supervisor" Type="storemodel.Store.Employees_Supervisor" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Supervisor">
         <PropertyRef Name="Id" />
       </Dependent>
     </ReferentialConstraint>
@@ -290,7 +356,11 @@
             <End Role="Units" EntitySet="Units" />
             <End Role="Product" EntitySet="Products" />
           </AssociationSet>
-          <EntitySet Name="RequestItems" EntityType="storemodel.RequestItem" />
+          <EntitySet Name="Roles" EntityType="storemodel.Role" />
+          <AssociationSet Name="EmployeeRole" Association="storemodel.EmployeeRole">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Role" EntitySet="Roles" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Supplier">
           <Key>
@@ -329,6 +399,7 @@
           <Property Name="balance" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Unit" Relationship="storemodel.UnitsProduct" FromRole="Product" ToRole="Units" />
           <Property Name="UnitsId" Type="Int32" Nullable="false" />
+          <Property Name="price" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -339,9 +410,10 @@
           <Property Name="email" Type="String" Nullable="false" />
           <Property Name="phone" Type="Int32" Nullable="false" />
           <Property Name="password" Type="String" Nullable="false" />
-          <Property Name="role" Type="String" Nullable="false" />
           <NavigationProperty Name="Department" Relationship="storemodel.EmployeeDepartment" FromRole="Employee" ToRole="Department" />
           <Property Name="DepartmentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Role" Relationship="storemodel.EmployeeRole" FromRole="Employee" ToRole="Role" />
+          <Property Name="RoleId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -442,14 +514,28 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="RequestItem">
+        <EntityType Name="StoreClerk" BaseType="storemodel.Employee" />
+        <EntityType Name="Supervisor" BaseType="storemodel.Employee" />
+        <EntityType Name="Role">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
-          <Property Name="name" Nullable="false" Type="String" />
-          <Property Name="qty" Nullable="false" Type="Int32" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Employees" Relationship="storemodel.EmployeeRole" FromRole="Role" ToRole="Employee" />
+          <Property Name="roleName" Type="String" Nullable="false" />
         </EntityType>
+        <Association Name="EmployeeRole">
+          <End Type="storemodel.Employee" Role="Employee" Multiplicity="*" />
+          <End Type="storemodel.Role" Role="Role" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -491,6 +577,7 @@
           <ScalarProperty Name="reorderQty" ColumnName="reorderQty" />
           <ScalarProperty Name="balance" ColumnName="balance" />
           <ScalarProperty Name="UnitsId" ColumnName="UnitsId" />
+          <ScalarProperty Name="price" ColumnName="price" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -519,12 +606,22 @@
           <ScalarProperty Name="email" ColumnName="email" />
           <ScalarProperty Name="phone" ColumnName="phone" />
           <ScalarProperty Name="password" ColumnName="password" />
-          <ScalarProperty Name="role" ColumnName="role" />
           <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
         </MappingFragment>
       </EntityTypeMapping>
       <EntityTypeMapping TypeName="IsTypeOf(storemodel.Manager)">
         <MappingFragment StoreEntitySet="Employees_Manager">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(storemodel.StoreClerk)">
+        <MappingFragment StoreEntitySet="Employees_StoreClerk">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(storemodel.Supervisor)">
+        <MappingFragment StoreEntitySet="Employees_Supervisor">
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -551,12 +648,11 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="RequestItems">
-      <EntityTypeMapping TypeName="IsTypeOf(storemodel.RequestItem)">
-        <MappingFragment StoreEntitySet="RequestItems">
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="IsTypeOf(storemodel.Role)">
+        <MappingFragment StoreEntitySet="Roles">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="qty" ColumnName="qty" />
+          <ScalarProperty Name="roleName" ColumnName="roleName" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

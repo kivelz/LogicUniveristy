@@ -33,6 +33,6 @@ namespace storemanagement.Models
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Request> Requests { get; set; }
         public virtual DbSet<Units> Units { get; set; }
-        public virtual DbSet<RequestItem> RequestItems { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
     }
 }

@@ -36,7 +36,8 @@ else
                     @Html.DisplayFor(modelItem => item.ProductDescription)
                 </td>
                 <td class="qty@(item.ProductId)">
-                    @Html.DisplayFor(modelItem => item.Qty)
+                    @Html.DisplayFor(modelItem => item.Qty) 
+                    <span> @Html.DisplayFor(modelItem => item.Metric)</span>
                 </td>
                 <td>
                     <a href="#" class="incrproduct" data-id="@item.ProductId">+</a>
@@ -48,6 +49,9 @@ else
         }
 
     </table>
+    <p>
+        <a href="#" class="placeorder">Place Order</a>
+    </p>
 }
 
 @section scripts {
@@ -104,6 +108,22 @@ else
                 function(data) {
                     location.reload();
                 });
+        });
+
+        $("a.placeorder").click(function (e) {
+            e.preventDefault();
+
+            var $this = $(this);
+
+            var url = "/cart/RequestOrder";
+
+            $(".ajaxbg").show();
+
+            $.post(url, { }, function (data) {
+                setTimeout(function () {
+                    $('form input[name="submit"]').click();
+                }, 2000);
+            });
         });
     </script>
 
