@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using storemanagement.Models;
@@ -17,8 +18,9 @@ namespace storemanagement.Controllers
         private UserDAL user = new UserDAL();
         private RequestDal requestdal = new RequestDal();
         private RequestDetailsContext detailContext = new RequestDetailsContext();
+
         // GET: Cart
-        public ActionResult Index()
+        public  ActionResult Index()
         {
            
             var cart = Session["cart"] as List<RequisitionDTO> ?? new List<RequisitionDTO>();
@@ -176,42 +178,53 @@ namespace storemanagement.Controllers
         public void RequestOrder()
         {
             List<RequisitionDTO> cart = Session["cart"] as List<RequisitionDTO>;
+            RequestItem requester = new RequestItem();
 
             Guid guid = (Guid)Session["UserId"];
             Employee emp = user.FindBySessionId(guid);
-           
-           
-            
+
             string dept = user.DeptName(emp);
             Request requestDetails = new Request();
+
+            detailContext.Add(requestDetails);
+            detailContext.Save(requestDetails);
+
+            AddToRequest(requestDetails, dept, emp);
+            AddItemsToRequest(requester, cart, requestDetails);
+            
+
+        }
+
+        public void AddToRequest(Request requestDetails, string dept, Employee emp)
+        {
             requestDetails.deptName = dept;
             requestDetails.remarks = "";
             requestDetails.status = "Pending";
             requestDetails.approvalDate = DateTime.Now;
             requestDetails.createdAt = DateTime.Now;
             requestDetails.EmployeeId = emp.Id;
-            
+
             detailContext.Add(requestDetails);
             detailContext.Save(requestDetails);
+        }
 
-
-            RequestItem requester = new RequestItem();
-            
+        public void AddItemsToRequest(RequestItem list, List<RequisitionDTO> cart, Request request)
+        {
+            Guid guid = (Guid)Session["UserId"];
+            Employee emp = user.FindBySessionId(guid);
 
             foreach (var item in cart)
             {
-                requester.EmployeeId = emp.Id;
-                requester.RequestId = requestDetails.Id;
-                requester.ProductId = item.ProductId;
-                requester.productCat = item.ProductCode;
-                requester.productDesc = item.ProductDescription;
-                requester.qty = item.Qty;
+                list.EmployeeId = emp.Id;
+                list.RequestId = request.Id;
+                list.ProductId = item.ProductId;
+                list.productCat = item.ProductCode;
+                list.productDesc = item.ProductDescription;
+                list.qty = item.Qty;
 
-                requestdal.Add(requester);
-                requestdal.Save(requester);
+                requestdal.Add(list);
+                requestdal.Save(list);
             }
-
-
         }
     }
 }

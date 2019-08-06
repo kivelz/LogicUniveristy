@@ -12,7 +12,7 @@ namespace storemanagement.DAL
 
         public void Add(Request details)
         {
-          db.Requests.Add(details);
+            db.Requests.Add(details);
           
         }
 
