@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 08/06/2019 16:16:41
+-- Date Created: 08/06/2019 17:11:05
 -- Generated from EDMX file: C:\Users\kivel\source\repos\storemanagement\storemanagement\Models\storemodel.edmx
 -- --------------------------------------------------
 
@@ -44,6 +44,12 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_DepartmentCollection_Collection]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[DepartmentCollection] DROP CONSTRAINT [FK_DepartmentCollection_Collection];
 GO
+IF OBJECT_ID(N'[dbo].[FK_RequestDetailsEmployee]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[RequestDetails] DROP CONSTRAINT [FK_RequestDetailsEmployee];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RequestDetailsRequest]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[RequestDetails] DROP CONSTRAINT [FK_RequestDetailsRequest];
+GO
 IF OBJECT_ID(N'[dbo].[FK_Manager_inherits_Employee]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Employees_Manager] DROP CONSTRAINT [FK_Manager_inherits_Employee];
 GO
@@ -84,6 +90,9 @@ IF OBJECT_ID(N'[dbo].[Units]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[Roles]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Roles];
+GO
+IF OBJECT_ID(N'[dbo].[RequestDetails]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[RequestDetails];
 GO
 IF OBJECT_ID(N'[dbo].[Employees_Manager]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Employees_Manager];
@@ -172,16 +181,10 @@ GO
 CREATE TABLE [dbo].[Requests] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [empId] int  NOT NULL,
-    [deptName] nvarchar(max)  NOT NULL,
-    [approvalDate] datetime  NULL,
-    [remarks] nvarchar(max)  NULL,
-    [status] nvarchar(max)  NOT NULL,
     [qty] int  NOT NULL,
     [productId] int  NOT NULL,
     [productDesc] nvarchar(max)  NOT NULL,
-    [productCat] nvarchar(max)  NOT NULL,
-    [empName] nvarchar(max)  NOT NULL,
-    [empEmail] nvarchar(max)  NOT NULL
+    [productCat] nvarchar(max)  NOT NULL
 );
 GO
 
@@ -197,6 +200,23 @@ GO
 CREATE TABLE [dbo].[Roles] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [roleName] nvarchar(max)  NOT NULL
+);
+GO
+
+-- Creating table 'RequestDetails'
+CREATE TABLE [dbo].[RequestDetails] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [createdAt] datetime  NOT NULL,
+    [empName] nvarchar(max)  NOT NULL,
+    [empNo] nvarchar(max)  NOT NULL,
+    [empEmail] nvarchar(max)  NOT NULL,
+    [remarks] nvarchar(max)  NOT NULL,
+    [status] nvarchar(max)  NOT NULL,
+    [approvalDate] datetime  NULL,
+    [deptName] nvarchar(max)  NOT NULL,
+    [requestDate] datetime  NOT NULL,
+    [Employee_Id] int  NOT NULL,
+    [RequestDetailsRequest_RequestDetails_Id] int  NOT NULL
 );
 GO
 
@@ -287,6 +307,12 @@ GO
 -- Creating primary key on [Id] in table 'Roles'
 ALTER TABLE [dbo].[Roles]
 ADD CONSTRAINT [PK_Roles]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'RequestDetails'
+ALTER TABLE [dbo].[RequestDetails]
+ADD CONSTRAINT [PK_RequestDetails]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -445,6 +471,36 @@ GO
 CREATE INDEX [IX_FK_DepartmentCollection_Collection]
 ON [dbo].[DepartmentCollection]
     ([Collections_Id]);
+GO
+
+-- Creating foreign key on [Employee_Id] in table 'RequestDetails'
+ALTER TABLE [dbo].[RequestDetails]
+ADD CONSTRAINT [FK_RequestDetailsEmployee]
+    FOREIGN KEY ([Employee_Id])
+    REFERENCES [dbo].[Employees]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_RequestDetailsEmployee'
+CREATE INDEX [IX_FK_RequestDetailsEmployee]
+ON [dbo].[RequestDetails]
+    ([Employee_Id]);
+GO
+
+-- Creating foreign key on [RequestDetailsRequest_RequestDetails_Id] in table 'RequestDetails'
+ALTER TABLE [dbo].[RequestDetails]
+ADD CONSTRAINT [FK_RequestDetailsRequest]
+    FOREIGN KEY ([RequestDetailsRequest_RequestDetails_Id])
+    REFERENCES [dbo].[Requests]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_RequestDetailsRequest'
+CREATE INDEX [IX_FK_RequestDetailsRequest]
+ON [dbo].[RequestDetails]
+    ([RequestDetailsRequest_RequestDetails_Id]);
 GO
 
 -- Creating foreign key on [Id] in table 'Employees_Manager'

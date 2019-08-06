@@ -6,18 +6,18 @@ using storemanagement.Models;
 
 namespace storemanagement.DAL
 {
-    public class RequestDal
+    public class RequestDetailsContext
     {
         private StoreManagement db = new StoreManagement();
 
-        public void Save(Request request)
+        public void Add(RequestDetails details)
         {
-            db.SaveChanges();
+            db.RequestDetails.Add(details);
         }
 
-        public void Add(Request request)
+        public void Save(RequestDetails details)
         {
-            db.Requests.Add(request);
+            db.SaveChanges();
         }
     }
 }

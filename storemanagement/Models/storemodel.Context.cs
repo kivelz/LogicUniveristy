@@ -34,5 +34,6 @@ namespace storemanagement.Models
         public virtual DbSet<Request> Requests { get; set; }
         public virtual DbSet<Units> Units { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<RequestDetails> RequestDetails { get; set; }
     }
 }

@@ -139,6 +139,7 @@
     <Compile Include="Controllers\StationaryController.cs" />
     <Compile Include="DAL\ProductDAL.cs" />
     <Compile Include="DAL\RequestDal.cs" />
+    <Compile Include="DAL\RequestDetailsContext.cs" />
     <Compile Include="DAL\StationaryDAL.cs" />
     <Compile Include="DAL\UserDAL.cs" />
     <Compile Include="Global.asax.cs">
@@ -167,6 +168,9 @@
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Request.cs">
+      <DependentUpon>storemodel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RequestDetails.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Role.cs">

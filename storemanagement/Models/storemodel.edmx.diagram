@@ -15,7 +15,7 @@
         <AssociationConnector Association="storemodel.EmployeeDepartment" />
         <EntityTypeShape EntityType="storemodel.Manager" Width="1.5" PointX="5.375" PointY="8.125" />
         <InheritanceConnector EntityType="storemodel.Manager" />
-        <EntityTypeShape EntityType="storemodel.Request" Width="1.5" PointX="3.625" PointY="5.375" />
+        <EntityTypeShape EntityType="storemodel.Request" Width="1.5" PointX="3.5" PointY="3.75" />
         <AssociationConnector Association="storemodel.EmployeeRequest" />
         <AssociationConnector Association="storemodel.RequestProduct" />
         <EntityTypeShape EntityType="storemodel.Units" Width="1.5" PointX="2.25" PointY="0.625" />
@@ -27,6 +27,9 @@
         <EntityTypeShape EntityType="storemodel.Role" Width="1.5" PointX="12" PointY="2.875" />
         <AssociationConnector Association="storemodel.EmployeeRole" />
         <AssociationConnector Association="storemodel.DepartmentCollection" />
+        <EntityTypeShape EntityType="storemodel.RequestDetails" Width="1.5" PointX="1.375" PointY="7" />
+        <AssociationConnector Association="storemodel.RequestDetailsEmployee" />
+        <AssociationConnector Association="storemodel.RequestDetailsRequest" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

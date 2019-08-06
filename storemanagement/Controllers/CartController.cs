@@ -15,6 +15,7 @@ namespace storemanagement.Controllers
         private ProductDAL db = new ProductDAL();
         private UserDAL user = new UserDAL();
         private RequestDal requestdal = new RequestDal();
+        private RequestDetailsContext detailContext = new RequestDetailsContext();
         // GET: Cart
         public ActionResult Index()
         {
@@ -176,11 +177,24 @@ namespace storemanagement.Controllers
             List<RequisitionDTO> cart = Session["cart"] as List<RequisitionDTO>;
 
             Employee emp = new Employee();
+            RequestDetails requestDetails = new RequestDetails();
             Session["UserId"] = emp;
 
             string name = emp.name;
             string email = emp.email;
             string dept = user.DeptName(emp);
+
+            requestDetails.empName = name;
+            requestDetails.empEmail = email;
+            requestDetails.deptName = dept;
+            requestDetails.remarks = "";
+            requestDetails.status = "Pending";
+            requestDetails.approvalDate = null;
+            requestDetails.requestDate = DateTime.Now;
+
+            detailContext.Add(requestDetails);
+            detailContext.Save(requestDetails);
+
 
             Request requester = new Request();
 
@@ -190,12 +204,8 @@ namespace storemanagement.Controllers
                 requester.productCat = item.ProductCode;
                 requester.productDesc = item.ProductDescription;
                 requester.qty = item.Qty;
-                requester.empEmail = email;
-                requester.empName = name;
-                requester.remarks = "";
-                requester.status = "Pending";
-                requester.deptName = dept;
-
+                
+                requestdal.Add(requester);
                 requestdal.Save(requester);
             }
 

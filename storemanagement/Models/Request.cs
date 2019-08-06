@@ -22,19 +22,14 @@ namespace storemanagement.Models
     
         public int Id { get; set; }
         public int empId { get; set; }
-        public string deptName { get; set; }
-        public Nullable<System.DateTime> approvalDate { get; set; }
-        public string remarks { get; set; }
-        public string status { get; set; }
         public int qty { get; set; }
         public int productId { get; set; }
         public string productDesc { get; set; }
         public string productCat { get; set; }
-        public string empName { get; set; }
-        public string empEmail { get; set; }
     
         public virtual Employee Employee { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product> Products { get; set; }
+        public virtual RequestDetails RequestDetail { get; set; }
     }
 }

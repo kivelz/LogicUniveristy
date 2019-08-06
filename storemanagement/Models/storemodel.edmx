@@ -15,6 +15,7 @@
     <EntitySet Name="Requests" EntityType="storemodel.Store.Requests" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Units" EntityType="storemodel.Store.Units" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Roles" EntityType="storemodel.Store.Roles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="RequestDetails" EntityType="storemodel.Store.RequestDetails" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Employees_Manager" EntityType="storemodel.Store.Employees_Manager" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Employees_StoreClerk" EntityType="storemodel.Store.Employees_StoreClerk" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Employees_Supervisor" EntityType="storemodel.Store.Employees_Supervisor" store:Type="Tables" Schema="dbo" />
@@ -55,6 +56,14 @@
     <AssociationSet Name="FK_DepartmentCollection_Collection" Association="storemodel.Store.FK_DepartmentCollection_Collection">
       <End Role="Collection" EntitySet="Collections" />
       <End Role="DepartmentCollection" EntitySet="DepartmentCollection" />
+    </AssociationSet>
+    <AssociationSet Name="RequestDetailsEmployee" Association="storemodel.Store.RequestDetailsEmployee">
+      <End Role="RequestDetails" EntitySet="RequestDetails" />
+      <End Role="Employee" EntitySet="Employees" />
+    </AssociationSet>
+    <AssociationSet Name="RequestDetailsRequest" Association="storemodel.Store.RequestDetailsRequest">
+      <End Role="RequestDetails" EntitySet="RequestDetails" />
+      <End Role="Request" EntitySet="Requests" />
     </AssociationSet>
     <AssociationSet Name="FK_Manager_inherits_Employee" Association="storemodel.Store.FK_Manager_inherits_Employee">
       <End Role="Employee" EntitySet="Employees" />
@@ -138,16 +147,10 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="empId" Type="int" Nullable="false" />
-    <Property Name="deptName" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="approvalDate" Type="datetime" Nullable="true" />
-    <Property Name="remarks" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="status" Type="nvarchar(max)" Nullable="false" />
     <Property Name="qty" Type="int" Nullable="false" />
     <Property Name="productId" Type="int" Nullable="false" />
     <Property Name="productDesc" Type="nvarchar(max)" Nullable="false" />
     <Property Name="productCat" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="empName" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="empEmail" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <EntityType Name="Units">
     <Key>
@@ -163,6 +166,23 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="roleName" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RequestDetails">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="createdAt" Type="datetime" Nullable="false" />
+    <Property Name="empName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="empNo" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="empEmail" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="remarks" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="status" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="approvalDate" Type="datetime" Nullable="true" />
+    <Property Name="deptName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="requestDate" Type="datetime" Nullable="false" />
+    <Property Name="Employee_Id" Type="int" Nullable="false" />
+    <Property Name="RequestDetailsRequest_RequestDetails_Id" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Employees_Manager">
     <Key>
@@ -255,6 +275,30 @@
       </Principal>
       <Dependent Role="Employee">
         <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RequestDetailsEmployee">
+    <End Role="RequestDetails" Type="storemodel.Store.RequestDetails" Multiplicity="*" />
+    <End Role="Employee" Type="storemodel.Store.Employees" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="RequestDetails">
+        <PropertyRef Name="Employee_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RequestDetailsRequest">
+    <End Role="RequestDetails" Type="storemodel.Store.RequestDetails" Multiplicity="*" />
+    <End Role="Request" Type="storemodel.Store.Requests" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Request">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="RequestDetails">
+        <PropertyRef Name="RequestDetailsRequest_RequestDetails_Id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -390,6 +434,15 @@
             <End Role="Department" EntitySet="Departments" />
             <End Role="Collection" EntitySet="Collections" />
           </AssociationSet>
+          <EntitySet Name="RequestDetails" EntityType="storemodel.RequestDetails" />
+          <AssociationSet Name="RequestDetailsEmployee" Association="storemodel.RequestDetailsEmployee">
+            <End Role="RequestDetails" EntitySet="RequestDetails" />
+            <End Role="Employee" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="RequestDetailsRequest" Association="storemodel.RequestDetailsRequest">
+            <End Role="RequestDetails" EntitySet="RequestDetails" />
+            <End Role="Request" EntitySet="Requests" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Supplier">
           <Key>
@@ -497,17 +550,12 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Employee" Relationship="storemodel.EmployeeRequest" FromRole="Request" ToRole="Employee" />
           <Property Name="empId" Type="Int32" Nullable="false" />
-          <Property Name="deptName" Type="String" Nullable="false" />
           <NavigationProperty Name="Products" Relationship="storemodel.RequestProduct" FromRole="Request" ToRole="Product" />
-          <Property Name="approvalDate" Type="DateTime" Nullable="true" />
-          <Property Name="remarks" Type="String" Nullable="true" />
-          <Property Name="status" Type="String" Nullable="false" />
           <Property Name="qty" Type="Int32" Nullable="false" />
           <Property Name="productId" Type="Int32" Nullable="false" />
           <Property Name="productDesc" Type="String" Nullable="false" />
-          <Property Name="productCat" Type="String" Nullable="false" />
-          <Property Name="empName" Type="String" Nullable="false" />
-          <Property Name="empEmail" Type="String" Nullable="false" />
+          <Property Name="productCat" Nullable="false" Type="String" />
+          <NavigationProperty Name="RequestDetail" Relationship="storemodel.RequestDetailsRequest" FromRole="Request" ToRole="RequestDetails" />
         </EntityType>
         <Association Name="EmployeeRequest">
           <End Type="storemodel.Employee" Role="Employee" Multiplicity="1" />
@@ -570,6 +618,30 @@
         <Association Name="DepartmentCollection">
           <End Type="storemodel.Department" Role="Department" Multiplicity="*" />
           <End Type="storemodel.Collection" Role="Collection" Multiplicity="*" />
+        </Association>
+        <EntityType Name="RequestDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="createdAt" Type="DateTime" Nullable="false" />
+          <Property Name="empName" Type="String" Nullable="false" />
+          <Property Name="empNo" Type="String" Nullable="false" />
+          <Property Name="empEmail" Type="String" Nullable="false" />
+          <Property Name="remarks" Type="String" Nullable="false" />
+          <Property Name="status" Type="String" Nullable="false" />
+          <Property Name="approvalDate" Type="DateTime" Nullable="true" />
+          <Property Name="deptName" Type="String" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="storemodel.RequestDetailsEmployee" FromRole="RequestDetails" ToRole="Employee" />
+          <Property Name="requestDate" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <Association Name="RequestDetailsEmployee">
+          <End Type="storemodel.RequestDetails" Role="RequestDetails" Multiplicity="1" />
+          <End Type="storemodel.Employee" Role="Employee" Multiplicity="1" />
+        </Association>
+        <Association Name="RequestDetailsRequest">
+          <End Type="storemodel.RequestDetails" Role="RequestDetails" Multiplicity="1" />
+          <End Type="storemodel.Request" Role="Request" Multiplicity="1" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -666,16 +738,10 @@
         <MappingFragment StoreEntitySet="Requests">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="empId" ColumnName="empId" />
-          <ScalarProperty Name="deptName" ColumnName="deptName" />
-          <ScalarProperty Name="approvalDate" ColumnName="approvalDate" />
-          <ScalarProperty Name="remarks" ColumnName="remarks" />
-          <ScalarProperty Name="status" ColumnName="status" />
           <ScalarProperty Name="qty" ColumnName="qty" />
           <ScalarProperty Name="productId" ColumnName="productId" />
           <ScalarProperty Name="productDesc" ColumnName="productDesc" />
           <ScalarProperty Name="productCat" ColumnName="productCat" />
-          <ScalarProperty Name="empName" ColumnName="empName" />
-          <ScalarProperty Name="empEmail" ColumnName="empEmail" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -696,6 +762,22 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="RequestDetails">
+      <EntityTypeMapping TypeName="IsTypeOf(storemodel.RequestDetails)">
+        <MappingFragment StoreEntitySet="RequestDetails">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="createdAt" ColumnName="createdAt" />
+          <ScalarProperty Name="empName" ColumnName="empName" />
+          <ScalarProperty Name="empNo" ColumnName="empNo" />
+          <ScalarProperty Name="empEmail" ColumnName="empEmail" />
+          <ScalarProperty Name="remarks" ColumnName="remarks" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="approvalDate" ColumnName="approvalDate" />
+          <ScalarProperty Name="deptName" ColumnName="deptName" />
+          <ScalarProperty Name="requestDate" ColumnName="requestDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <AssociationSetMapping Name="RequestProduct" TypeName="storemodel.RequestProduct" StoreEntitySet="RequestProduct">
       <EndProperty Name="Request">
         <ScalarProperty Name="Id" ColumnName="RequestProduct_Product_Id" />
@@ -710,6 +792,22 @@
       </EndProperty>
       <EndProperty Name="Collection">
         <ScalarProperty Name="Id" ColumnName="Collections_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="RequestDetailsEmployee" TypeName="storemodel.RequestDetailsEmployee" StoreEntitySet="RequestDetails">
+      <EndProperty Name="Employee">
+        <ScalarProperty Name="Id" ColumnName="Employee_Id" />
+      </EndProperty>
+      <EndProperty Name="RequestDetails">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="RequestDetailsRequest" TypeName="storemodel.RequestDetailsRequest" StoreEntitySet="RequestDetails">
+      <EndProperty Name="Request">
+        <ScalarProperty Name="Id" ColumnName="RequestDetailsRequest_RequestDetails_Id" />
+      </EndProperty>
+      <EndProperty Name="RequestDetails">
+        <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
   </EntityContainerMapping>
