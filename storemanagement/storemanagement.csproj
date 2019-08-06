@@ -170,7 +170,7 @@
     <Compile Include="Models\Request.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\RequestDetails.cs">
+    <Compile Include="Models\RequestItem.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Role.cs">

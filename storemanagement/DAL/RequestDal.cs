@@ -10,14 +10,15 @@ namespace storemanagement.DAL
     {
         private StoreManagement db = new StoreManagement();
 
-        public void Save(Request request)
+        public void Save(RequestItem request)
         {
+
             db.SaveChanges();
         }
 
-        public void Add(Request request)
+        public void Add(RequestItem request)
         {
-            db.Requests.Add(request);
+            db.RequestItems.Add(request);
         }
     }
 }

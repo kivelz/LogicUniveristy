@@ -12,19 +12,19 @@ namespace storemanagement.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class RequestDetails
+    public partial class RequestItem
     {
         public int Id { get; set; }
-        public System.DateTime createdAt { get; set; }
-        public string empName { get; set; }
-        public string empNo { get; set; }
-        public string empEmail { get; set; }
-        public string remarks { get; set; }
-        public string status { get; set; }
-        public Nullable<System.DateTime> approvalDate { get; set; }
-        public string deptName { get; set; }
-        public System.DateTime requestDate { get; set; }
+        public int empId { get; set; }
+        public int qty { get; set; }
+        public string productDesc { get; set; }
+        public string productCat { get; set; }
+        public int ProductId { get; set; }
+        public int EmployeeId { get; set; }
+        public int RequestId { get; set; }
     
+        public virtual Product Product { get; set; }
         public virtual Employee Employee { get; set; }
+        public virtual Request Request { get; set; }
     }
 }

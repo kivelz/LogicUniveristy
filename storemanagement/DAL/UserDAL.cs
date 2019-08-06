@@ -39,11 +39,14 @@ namespace storemanagement.DAL
 
         public string DeptName(Employee emp)
         {
-            string empDeptName = "";
-            Employee employee = new Employee();
-            employee = db.Employees.FirstOrDefault(x => x.DepartmentId == emp.DepartmentId);
-            empDeptName = employee.Department.dept_name;
-            return empDeptName;
+            emp = db.Employees.FirstOrDefault(x => x.Department.dept_name == emp.Department.dept_name);
+            string dName = emp.Department.dept_name;
+            return dName;
+        }
+
+        public Employee FindBySessionId(Guid guid)
+        {
+            return db.Employees.FirstOrDefault(x => x.sessionId == guid);
         }
     }
 }

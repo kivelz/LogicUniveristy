@@ -14,22 +14,14 @@ namespace storemanagement.Models
     
     public partial class Request
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Request()
-        {
-            this.Products = new HashSet<Product>();
-        }
-    
         public int Id { get; set; }
-        public int empId { get; set; }
-        public int qty { get; set; }
-        public int productId { get; set; }
-        public string productDesc { get; set; }
-        public string productCat { get; set; }
+        public System.DateTime createdAt { get; set; }
+        public string remarks { get; set; }
+        public string status { get; set; }
+        public Nullable<System.DateTime> approvalDate { get; set; }
+        public string deptName { get; set; }
+        public int EmployeeId { get; set; }
     
         public virtual Employee Employee { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Product> Products { get; set; }
-        public virtual RequestDetails RequestDetail { get; set; }
     }
 }

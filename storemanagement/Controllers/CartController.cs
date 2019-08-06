@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web;
 using System.Web.Mvc;
 using storemanagement.Models;
@@ -176,35 +177,36 @@ namespace storemanagement.Controllers
         {
             List<RequisitionDTO> cart = Session["cart"] as List<RequisitionDTO>;
 
-            Employee emp = new Employee();
-            RequestDetails requestDetails = new RequestDetails();
-            Session["UserId"] = emp;
-
-            string name = emp.name;
-            string email = emp.email;
+            Guid guid = (Guid)Session["UserId"];
+            Employee emp = user.FindBySessionId(guid);
+           
+           
+            
             string dept = user.DeptName(emp);
-
-            requestDetails.empName = name;
-            requestDetails.empEmail = email;
+            Request requestDetails = new Request();
             requestDetails.deptName = dept;
             requestDetails.remarks = "";
             requestDetails.status = "Pending";
-            requestDetails.approvalDate = null;
-            requestDetails.requestDate = DateTime.Now;
-
+            requestDetails.approvalDate = DateTime.Now;
+            requestDetails.createdAt = DateTime.Now;
+            requestDetails.EmployeeId = emp.Id;
+            
             detailContext.Add(requestDetails);
             detailContext.Save(requestDetails);
 
 
-            Request requester = new Request();
+            RequestItem requester = new RequestItem();
+            
 
             foreach (var item in cart)
             {
-                requester.productId = item.ProductId;
+                requester.EmployeeId = emp.Id;
+                requester.RequestId = requestDetails.Id;
+                requester.ProductId = item.ProductId;
                 requester.productCat = item.ProductCode;
                 requester.productDesc = item.ProductDescription;
                 requester.qty = item.Qty;
-                
+
                 requestdal.Add(requester);
                 requestdal.Save(requester);
             }
