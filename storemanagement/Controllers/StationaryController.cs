@@ -18,6 +18,7 @@ namespace storemanagement.Controllers
         // GET: Stationary
         public ActionResult Index()
         {
+
             return View();
         }
         public ActionResult Category(string name)
@@ -30,13 +31,14 @@ namespace storemanagement.Controllers
 
 
                 Category cat = db.GetByCategory(name);
-                int catId = cat.Id;
+               
 
-                if (catId == 0)
+                categories = db.GetAllCategories();
+
+                if (cat == null)
                 {
-                    categories = db.GetAllCategories();
+                
                     list = db1.GetAllProduct();
-
                     shop = new Shop();
                     shop.categoryList = categories;
                     shop.productList = list;
@@ -44,6 +46,7 @@ namespace storemanagement.Controllers
                 }
                 else
                 {
+                    int catId = cat.Id;
                     categories = db.GetAllCategories();
                     list = db1.FindById(catId);
 

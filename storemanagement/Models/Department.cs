@@ -18,6 +18,7 @@ namespace storemanagement.Models
         public Department()
         {
             this.Employees = new HashSet<Employee>();
+            this.Collections = new HashSet<Collection>();
         }
     
         public int Id { get; set; }
@@ -29,6 +30,7 @@ namespace storemanagement.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Employee> Employees { get; set; }
-        public virtual Collection Collection { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Collection> Collections { get; set; }
     }
 }

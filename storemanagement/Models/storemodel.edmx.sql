@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 08/05/2019 15:02:48
+-- Date Created: 08/06/2019 16:16:41
 -- Generated from EDMX file: C:\Users\kivel\source\repos\storemanagement\storemanagement\Models\storemodel.edmx
 -- --------------------------------------------------
 
@@ -23,9 +23,6 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_EmployeeDepartment]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Employees] DROP CONSTRAINT [FK_EmployeeDepartment];
 GO
-IF OBJECT_ID(N'[dbo].[FK_DepartmentCollection]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Departments] DROP CONSTRAINT [FK_DepartmentCollection];
-GO
 IF OBJECT_ID(N'[dbo].[FK_EmployeeRequest]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Requests] DROP CONSTRAINT [FK_EmployeeRequest];
 GO
@@ -40,6 +37,12 @@ IF OBJECT_ID(N'[dbo].[FK_UnitsProduct]', 'F') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[FK_EmployeeRole]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Employees] DROP CONSTRAINT [FK_EmployeeRole];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DepartmentCollection_Department]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[DepartmentCollection] DROP CONSTRAINT [FK_DepartmentCollection_Department];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DepartmentCollection_Collection]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[DepartmentCollection] DROP CONSTRAINT [FK_DepartmentCollection_Collection];
 GO
 IF OBJECT_ID(N'[dbo].[FK_Manager_inherits_Employee]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Employees_Manager] DROP CONSTRAINT [FK_Manager_inherits_Employee];
@@ -94,6 +97,9 @@ GO
 IF OBJECT_ID(N'[dbo].[RequestProduct]', 'U') IS NOT NULL
     DROP TABLE [dbo].[RequestProduct];
 GO
+IF OBJECT_ID(N'[dbo].[DepartmentCollection]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[DepartmentCollection];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -117,8 +123,7 @@ CREATE TABLE [dbo].[Departments] (
     [contact_name] nvarchar(max)  NOT NULL,
     [phone] int  NOT NULL,
     [fax] int  NOT NULL,
-    [dept_head] nvarchar(max)  NOT NULL,
-    [Collection_Id] int  NOT NULL
+    [dept_head] nvarchar(max)  NOT NULL
 );
 GO
 
@@ -146,8 +151,7 @@ GO
 -- Creating table 'Collections'
 CREATE TABLE [dbo].[Collections] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [CollectIonPoint] nvarchar(max)  NOT NULL,
-    [Representive_Name] nvarchar(max)  NOT NULL
+    [CollectIonPoint] nvarchar(max)  NOT NULL
 );
 GO
 
@@ -159,7 +163,8 @@ CREATE TABLE [dbo].[Employees] (
     [phone] int  NOT NULL,
     [password] nvarchar(max)  NOT NULL,
     [DepartmentId] int  NOT NULL,
-    [RoleId] int  NOT NULL
+    [RoleId] int  NOT NULL,
+    [sessionId] uniqueidentifier  NULL
 );
 GO
 
@@ -167,11 +172,16 @@ GO
 CREATE TABLE [dbo].[Requests] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [empId] int  NOT NULL,
-    [deptId] int  NOT NULL,
-    [approvalDate] datetime  NOT NULL,
-    [remarks] nvarchar(max)  NOT NULL,
+    [deptName] nvarchar(max)  NOT NULL,
+    [approvalDate] datetime  NULL,
+    [remarks] nvarchar(max)  NULL,
     [status] nvarchar(max)  NOT NULL,
-    [qty] int  NOT NULL
+    [qty] int  NOT NULL,
+    [productId] int  NOT NULL,
+    [productDesc] nvarchar(max)  NOT NULL,
+    [productCat] nvarchar(max)  NOT NULL,
+    [empName] nvarchar(max)  NOT NULL,
+    [empEmail] nvarchar(max)  NOT NULL
 );
 GO
 
@@ -212,6 +222,13 @@ GO
 CREATE TABLE [dbo].[RequestProduct] (
     [RequestProduct_Product_Id] int  NOT NULL,
     [Products_Id] int  NOT NULL
+);
+GO
+
+-- Creating table 'DepartmentCollection'
+CREATE TABLE [dbo].[DepartmentCollection] (
+    [Departments_Id] int  NOT NULL,
+    [Collections_Id] int  NOT NULL
 );
 GO
 
@@ -297,6 +314,12 @@ ADD CONSTRAINT [PK_RequestProduct]
     PRIMARY KEY CLUSTERED ([RequestProduct_Product_Id], [Products_Id] ASC);
 GO
 
+-- Creating primary key on [Departments_Id], [Collections_Id] in table 'DepartmentCollection'
+ALTER TABLE [dbo].[DepartmentCollection]
+ADD CONSTRAINT [PK_DepartmentCollection]
+    PRIMARY KEY CLUSTERED ([Departments_Id], [Collections_Id] ASC);
+GO
+
 -- --------------------------------------------------
 -- Creating all FOREIGN KEY constraints
 -- --------------------------------------------------
@@ -329,21 +352,6 @@ GO
 CREATE INDEX [IX_FK_EmployeeDepartment]
 ON [dbo].[Employees]
     ([DepartmentId]);
-GO
-
--- Creating foreign key on [Collection_Id] in table 'Departments'
-ALTER TABLE [dbo].[Departments]
-ADD CONSTRAINT [FK_DepartmentCollection]
-    FOREIGN KEY ([Collection_Id])
-    REFERENCES [dbo].[Collections]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_DepartmentCollection'
-CREATE INDEX [IX_FK_DepartmentCollection]
-ON [dbo].[Departments]
-    ([Collection_Id]);
 GO
 
 -- Creating foreign key on [empId] in table 'Requests'
@@ -413,6 +421,30 @@ GO
 CREATE INDEX [IX_FK_EmployeeRole]
 ON [dbo].[Employees]
     ([RoleId]);
+GO
+
+-- Creating foreign key on [Departments_Id] in table 'DepartmentCollection'
+ALTER TABLE [dbo].[DepartmentCollection]
+ADD CONSTRAINT [FK_DepartmentCollection_Department]
+    FOREIGN KEY ([Departments_Id])
+    REFERENCES [dbo].[Departments]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [Collections_Id] in table 'DepartmentCollection'
+ALTER TABLE [dbo].[DepartmentCollection]
+ADD CONSTRAINT [FK_DepartmentCollection_Collection]
+    FOREIGN KEY ([Collections_Id])
+    REFERENCES [dbo].[Collections]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_DepartmentCollection_Collection'
+CREATE INDEX [IX_FK_DepartmentCollection_Collection]
+ON [dbo].[DepartmentCollection]
+    ([Collections_Id]);
 GO
 
 -- Creating foreign key on [Id] in table 'Employees_Manager'

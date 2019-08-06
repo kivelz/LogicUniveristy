@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using storemanagement.Models;
 
 
@@ -20,10 +21,10 @@ namespace storemanagement.DAL
         }
         public Employee EmployeeDetails(Employee emp)
         {
-            var userDetails = db.Employees.Where(x => x.email == emp.email && x.password == emp.password);
+            var userDetails = db.Employees.FirstOrDefault(x => x.email == emp.email && x.password == emp.password);
 
-            return (Employee) userDetails;
-            
+            return userDetails;
+
         }
         //Find employee id
         public Employee FindById(int id)
@@ -34,6 +35,15 @@ namespace storemanagement.DAL
         public void Save(Employee employee)
         {
             db.SaveChanges();
+        }
+
+        public string DeptName(Employee emp)
+        {
+            string empDeptName = "";
+            Employee employee = new Employee();
+            employee = db.Employees.FirstOrDefault(x => x.DepartmentId == emp.DepartmentId);
+            empDeptName = employee.Department.dept_name;
+            return empDeptName;
         }
     }
 }

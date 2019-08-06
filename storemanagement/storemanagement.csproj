@@ -138,6 +138,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\StationaryController.cs" />
     <Compile Include="DAL\ProductDAL.cs" />
+    <Compile Include="DAL\RequestDal.cs" />
     <Compile Include="DAL\StationaryDAL.cs" />
     <Compile Include="DAL\UserDAL.cs" />
     <Compile Include="Global.asax.cs">

@@ -13,6 +13,8 @@ namespace storemanagement.Controllers
     public class CartController : Controller
     {
         private ProductDAL db = new ProductDAL();
+        private UserDAL user = new UserDAL();
+        private RequestDal requestdal = new RequestDal();
         // GET: Cart
         public ActionResult Index()
         {
@@ -171,10 +173,33 @@ namespace storemanagement.Controllers
         [HttpPost]
         public void RequestOrder()
         {
-            List<RequisitionDTO> request = Session["cart"] as List<RequisitionDTO>;
+            List<RequisitionDTO> cart = Session["cart"] as List<RequisitionDTO>;
 
-            var details = Session["UserId"];
-            Debug.WriteLine(details);
+            Employee emp = new Employee();
+            Session["UserId"] = emp;
+
+            string name = emp.name;
+            string email = emp.email;
+            string dept = user.DeptName(emp);
+
+            Request requester = new Request();
+
+            foreach (var item in cart)
+            {
+                requester.productId = item.ProductId;
+                requester.productCat = item.ProductCode;
+                requester.productDesc = item.ProductDescription;
+                requester.qty = item.Qty;
+                requester.empEmail = email;
+                requester.empName = name;
+                requester.remarks = "";
+                requester.status = "Pending";
+                requester.deptName = dept;
+
+                requestdal.Save(requester);
+            }
+
+
         }
     }
 }

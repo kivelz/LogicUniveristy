@@ -21,6 +21,7 @@ namespace storemanagement.Models
         public string password { get; set; }
         public int DepartmentId { get; set; }
         public int RoleId { get; set; }
+        public Nullable<System.Guid> sessionId { get; set; }
     
         public virtual Department Department { get; set; }
         public virtual Role Role { get; set; }

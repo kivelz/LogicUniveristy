@@ -1,4 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Diagnostics;
+using System.Web.Mvc;
 using storemanagement.Models;
 using storemanagement.DAL;
 using storemanagement.Ulti;
@@ -19,6 +22,7 @@ namespace storemanagement.Controllers
         public ActionResult Index(Employee model)
         {
             var userDetails = db.EmployeeDetails(model);
+          
 
             if (!ModelState.IsValid)
             {
@@ -29,8 +33,11 @@ namespace storemanagement.Controllers
 
             if(userDetails != null)
             {
-                Session["UserId"] = userDetails.Id;
-                return RedirectToAction("Index");
+                userDetails.sessionId = Guid.NewGuid();
+                Session["UserId"] = userDetails.sessionId;
+                db.Save(model);
+                return RedirectToAction("Category", "Stationary");
+                
             }
 
             else 
