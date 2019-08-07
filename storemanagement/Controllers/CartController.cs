@@ -180,20 +180,21 @@ namespace storemanagement.Controllers
         public void RequestOrder()
         {
             List<RequisitionDTO> cart = Session["cart"] as List<RequisitionDTO>;
+
             RequestItem requester = new RequestItem();
 
             Guid guid = (Guid)Session["UserId"];
             Employee emp = user.FindBySessionId(guid);
 
             string dept = user.DeptName(emp);
-            string name = emp.Department.dept_head;
+            string empDeptHeadName = emp.Department.dept_head;
             Request requestDetails = new Request();
 
             detailContext.Add(requestDetails);
             detailContext.Save(requestDetails);
 
             AddToRequest(requestDetails, dept, emp);
-            AddItemsToRequest(requester, cart, requestDetails);
+            AddItemsToRequest(requester, cart, requestDetails, emp);
 
             var client = new SmtpClient("hotmail.com", 2525)
             {
@@ -202,7 +203,7 @@ namespace storemanagement.Controllers
             };
 
 
-            client.Send("admin@example.com", "admin@example.com", "New Request", "A request has been made for stationary purchase. Please log in ");
+            client.Send("admin@logicUniveristy.com", $"{empDeptHeadName}", $"New request from {emp.name} OrderId: {requestDetails.Id}", "A request has been made for stationary purchase. Please log in ");
 
             Session["cart"] = null;
 
@@ -221,10 +222,9 @@ namespace storemanagement.Controllers
             detailContext.Save(requestDetails);
         }
 
-        public void AddItemsToRequest(RequestItem list, List<RequisitionDTO> cart, Request request)
+        public void AddItemsToRequest(RequestItem list, List<RequisitionDTO> cart, Request request, Employee emp)
         {
-            Guid guid = (Guid)Session["UserId"];
-            Employee emp = user.FindBySessionId(guid);
+           
 
             foreach (var item in cart)
             {
