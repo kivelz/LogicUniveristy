@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Web;
@@ -184,6 +186,7 @@ namespace storemanagement.Controllers
             Employee emp = user.FindBySessionId(guid);
 
             string dept = user.DeptName(emp);
+            string name = emp.Department.dept_head;
             Request requestDetails = new Request();
 
             detailContext.Add(requestDetails);
@@ -191,7 +194,17 @@ namespace storemanagement.Controllers
 
             AddToRequest(requestDetails, dept, emp);
             AddItemsToRequest(requester, cart, requestDetails);
-            
+
+            var client = new SmtpClient("hotmail.com", 2525)
+            {
+                Credentials = new NetworkCredential("21f57cbb94cf88", "e9d7055c69f02d"),
+                EnableSsl = true
+            };
+
+
+            client.Send("admin@example.com", "admin@example.com", "New Request", "A request has been made for stationary purchase. Please log in ");
+
+            Session["cart"] = null;
 
         }
 
@@ -226,5 +239,7 @@ namespace storemanagement.Controllers
                 requestdal.Save(list);
             }
         }
+
     }
+
 }
