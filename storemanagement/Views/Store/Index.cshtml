@@ -1,4 +1,4 @@
-﻿@model IEnumerable<storemanagement.Models.DTO.ListOfRequest>
+﻿@model storemanagement.Models.DTO.ListOfRequest
 
 @{
     ViewBag.Title = "Index";
@@ -6,20 +6,31 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
-        <th></th>
+        <th>Requested Date</th>
+        <th>Requester</th>
+        <th>Remarks</th>
+        <th>Department</th>
+        <th>Status</th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.request) {
     <tr>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            @Html.DisplayFor(modelItem => item.createdAt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.employeeName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.remarks)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.deptName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.status)
         </td>
     </tr>
 }

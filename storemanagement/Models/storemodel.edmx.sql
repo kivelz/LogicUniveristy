@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 08/08/2019 15:56:06
+-- Date Created: 08/08/2019 18:25:35
 -- Generated from EDMX file: C:\Users\kivel\source\repos\storemanagement\storemanagement\Models\storemodel.edmx
 -- --------------------------------------------------
 
@@ -207,7 +207,9 @@ CREATE TABLE [dbo].[Requests] (
     [status] nvarchar(max)  NOT NULL,
     [approvalDate] datetime  NULL,
     [deptName] nvarchar(max)  NOT NULL,
-    [EmployeeId] int  NOT NULL
+    [EmployeeId] int  NOT NULL,
+    [employeeName] nvarchar(max)  NOT NULL,
+    [employeeNo] int  NOT NULL
 );
 GO
 

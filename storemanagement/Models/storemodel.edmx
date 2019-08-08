@@ -175,6 +175,8 @@
     <Property Name="approvalDate" Type="datetime" Nullable="true" />
     <Property Name="deptName" Type="nvarchar(max)" Nullable="false" />
     <Property Name="EmployeeId" Type="int" Nullable="false" />
+    <Property Name="employeeName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="employeeNo" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Employees_Manager">
     <Key>
@@ -578,6 +580,8 @@
           <Property Name="deptName" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Employee" Relationship="storemodel.RequestEmployee" FromRole="Request" ToRole="Employee" />
           <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+          <Property Name="employeeName" Type="String" Nullable="false" />
+          <Property Name="employeeNo" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="RequestItemProduct">
           <End Type="storemodel.RequestItem" Role="RequestItem" Multiplicity="*" />
@@ -770,6 +774,8 @@
           <ScalarProperty Name="approvalDate" ColumnName="approvalDate" />
           <ScalarProperty Name="deptName" ColumnName="deptName" />
           <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+          <ScalarProperty Name="employeeName" ColumnName="employeeName" />
+          <ScalarProperty Name="employeeNo" ColumnName="employeeNo" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

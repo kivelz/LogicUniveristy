@@ -4,7 +4,9 @@ using System.EnterpriseServices;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls.Expressions;
 using storemanagement.DAL;
+using storemanagement.Models;
 using storemanagement.Models.DTO;
 
 namespace storemanagement.Controllers
@@ -14,13 +16,24 @@ namespace storemanagement.Controllers
         private readonly RequestDetailsContext _dbItem = new RequestDetailsContext();
         private readonly RequestDal _request = new RequestDal();
         // GET: Store
-        public ActionResult Index()
+        public ActionResult Index(string status)
         {
-            ListOfRequest request = new ListOfRequest();
+            ListOfRequest listOfRequest = new ListOfRequest();
+            List<Request> reqList;
+            List<RequestItem> reqItem;
 
-            request.item = _dbItem.GetAllRequestItem();
-            request.request = _request.GetAllRequest();
-            return View();
+            if (status == null)
+            {
+                reqList = _request.GetAllRequest();
+                listOfRequest.request = reqList;
+
+            } else
+            {
+                reqList = _request.SearchRequestStatus(status);
+                listOfRequest.request = reqList;
+            }
+            return View(listOfRequest);
+
         }
     }
 }

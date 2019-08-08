@@ -210,6 +210,8 @@ namespace storemanagement.Controllers
 
         public void AddToRequest(Request requestDetails, string dept, Employee emp)
         {
+            requestDetails.employeeName = emp.name;
+            requestDetails.employeeNo = emp.empNo;
             requestDetails.deptName = dept;
             requestDetails.remarks = "";
             requestDetails.status = "Pending";

@@ -39,22 +39,17 @@ namespace storemanagement.Controllers
                 {
                 
                     list = db1.GetAllProduct();
-                    shop = new Shop();
-                    shop.categoryList = categories;
-                    shop.productList = list;
+                    shop = new Shop {categoryList = categories, productList = list};
                     return View(shop);
                 }
                 else
                 {
                     int catId = cat.Id;
-                    categories = db.GetAllCategories();
                     list = db1.FindById(catId);
 
                     categories = db.GetAllCategories();
 
-                    shop = new Shop();
-                    shop.categoryList = categories;
-                    shop.productList = list;
+                    shop = new Shop {categoryList = categories, productList = list};
 
                     return View(shop);
                 } 

@@ -25,5 +25,10 @@ namespace storemanagement.DAL
         {
             return db.Requests.ToList();
         }
+
+        public List<Request> SearchRequestStatus(string status)
+        {
+            return db.Requests.Where(x => x.status.Contains(status)).ToList();
+        }
     }
 }

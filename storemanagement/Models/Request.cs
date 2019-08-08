@@ -21,6 +21,8 @@ namespace storemanagement.Models
         public Nullable<System.DateTime> approvalDate { get; set; }
         public string deptName { get; set; }
         public int EmployeeId { get; set; }
+        public string employeeName { get; set; }
+        public int employeeNo { get; set; }
     
         public virtual Employee Employee { get; set; }
     }
