@@ -24,10 +24,6 @@
       <End Role="Product" EntitySet="Products" />
       <End Role="Category" EntitySet="Categories" />
     </AssociationSet>
-    <AssociationSet Name="EmployeeDepartment" Association="storemodel.Store.EmployeeDepartment">
-      <End Role="Employee" EntitySet="Employees" />
-      <End Role="Department" EntitySet="Departments" />
-    </AssociationSet>
     <AssociationSet Name="UnitsProduct" Association="storemodel.Store.UnitsProduct">
       <End Role="Units" EntitySet="Units" />
       <End Role="Product" EntitySet="Products" />
@@ -59,6 +55,10 @@
     <AssociationSet Name="RequestEmployee" Association="storemodel.Store.RequestEmployee">
       <End Role="Request" EntitySet="Requests" />
       <End Role="Employee" EntitySet="Employees" />
+    </AssociationSet>
+    <AssociationSet Name="EmployeeDepartment" Association="storemodel.Store.EmployeeDepartment">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="Department" EntitySet="Departments" />
     </AssociationSet>
     <AssociationSet Name="FK_Manager_inherits_Employee" Association="storemodel.Store.FK_Manager_inherits_Employee">
       <End Role="Employee" EntitySet="Employees" />
@@ -93,7 +93,7 @@
     <Property Name="contact_name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="phone" Type="int" Nullable="false" />
     <Property Name="fax" Type="int" Nullable="false" />
-    <Property Name="dept_head" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="dept_head" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Products">
     <Key>
@@ -132,17 +132,16 @@
     <Property Name="email" Type="nvarchar(max)" Nullable="false" />
     <Property Name="phone" Type="int" Nullable="false" />
     <Property Name="password" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="DepartmentId" Type="int" Nullable="false" />
     <Property Name="RoleId" Type="int" Nullable="false" />
     <Property Name="sessionId" Type="uniqueidentifier" Nullable="true" />
     <Property Name="empNo" Type="int" Nullable="false" />
+    <Property Name="DepartmentId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="RequestItems">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="empId" Type="int" Nullable="false" />
     <Property Name="qty" Type="int" Nullable="false" />
     <Property Name="productDesc" Type="nvarchar(max)" Nullable="false" />
     <Property Name="productCat" Type="nvarchar(max)" Nullable="false" />
@@ -215,18 +214,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="EmployeeDepartment">
-    <End Role="Employee" Type="storemodel.Store.Employees" Multiplicity="*" />
-    <End Role="Department" Type="storemodel.Store.Departments" Multiplicity="1" />
-    <ReferentialConstraint>
-      <Principal Role="Department">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Employee">
-        <PropertyRef Name="DepartmentId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="UnitsProduct">
     <End Role="Units" Type="storemodel.Store.Units" Multiplicity="1" />
     <End Role="Product" Type="storemodel.Store.Products" Multiplicity="*" />
@@ -296,6 +283,18 @@
       </Principal>
       <Dependent Role="Request">
         <PropertyRef Name="EmployeeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="EmployeeDepartment">
+    <End Role="Employee" Type="storemodel.Store.Employees" Multiplicity="*" />
+    <End Role="Department" Type="storemodel.Store.Departments" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Employee">
+        <PropertyRef Name="DepartmentId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -379,10 +378,6 @@
             <End Role="Category" EntitySet="Categories" />
           </AssociationSet>
           <EntitySet Name="Collections" EntityType="storemodel.Collection" />
-          <AssociationSet Name="EmployeeDepartment" Association="storemodel.EmployeeDepartment">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="Department" EntitySet="Departments" />
-          </AssociationSet>
           <EntitySet Name="Employees" EntityType="storemodel.Employee" />
           <EntitySet Name="RequestItems" EntityType="storemodel.RequestItem" />
           <EntitySet Name="Units" EntityType="storemodel.Units" />
@@ -416,6 +411,10 @@
             <End Role="Request" EntitySet="Requests" />
             <End Role="Employee" EntitySet="Employees" />
           </AssociationSet>
+          <AssociationSet Name="EmployeeDepartment" Association="storemodel.EmployeeDepartment">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Department" EntitySet="Departments" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Supplier">
           <Key>
@@ -437,9 +436,9 @@
           <Property Name="contact_name" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="phone" Type="Int32" Nullable="false" />
           <Property Name="fax" Type="Int32" Nullable="false" />
-          <Property Name="dept_head" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Employees" Relationship="storemodel.EmployeeDepartment" FromRole="Department" ToRole="Employee" />
+          <Property Name="dept_head" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Collections" Relationship="storemodel.DepartmentCollection" FromRole="Department" ToRole="Collection" />
+          <NavigationProperty Name="Employees" Relationship="storemodel.EmployeeDepartment" FromRole="Department" ToRole="Employee" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -465,13 +464,13 @@
           <Property Name="email" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="phone" Type="Int32" Nullable="false" />
           <Property Name="password" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Department" Relationship="storemodel.EmployeeDepartment" FromRole="Employee" ToRole="Department" />
-          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Role" Relationship="storemodel.EmployeeRole" FromRole="Employee" ToRole="Role" />
           <Property Name="RoleId" Type="Int32" Nullable="false" />
           <Property Name="sessionId" Type="Guid" Nullable="true" />
           <Property Name="empNo" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Requests" Relationship="storemodel.RequestEmployee" FromRole="Employee" ToRole="Request" />
+          <NavigationProperty Name="Department" Relationship="storemodel.EmployeeDepartment" FromRole="Employee" ToRole="Department" />
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -504,18 +503,6 @@
           <Property Name="CollectIonPoint" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Departments" Relationship="storemodel.DepartmentCollection" FromRole="Collection" ToRole="Department" />
         </EntityType>
-        <Association Name="EmployeeDepartment">
-          <End Type="storemodel.Employee" Role="Employee" Multiplicity="*" />
-          <End Type="storemodel.Department" Role="Department" Multiplicity="1" />
-          <ReferentialConstraint>
-            <Principal Role="Department">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Employee">
-              <PropertyRef Name="DepartmentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Manager" BaseType="storemodel.Employee">
         </EntityType>
         <EntityType Name="RequestItem">
@@ -523,7 +510,6 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="empId" Nullable="false" Type="Int32" />
           <Property Name="qty" Type="Int32" Nullable="false" />
           <Property Name="productDesc" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="productCat" Nullable="false" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
@@ -641,6 +627,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="EmployeeDepartment">
+          <End Type="storemodel.Employee" Role="Employee" Multiplicity="*" />
+          <End Type="storemodel.Department" Role="Department" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -710,10 +708,10 @@
           <ScalarProperty Name="email" ColumnName="email" />
           <ScalarProperty Name="phone" ColumnName="phone" />
           <ScalarProperty Name="password" ColumnName="password" />
-          <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
           <ScalarProperty Name="RoleId" ColumnName="RoleId" />
           <ScalarProperty Name="sessionId" ColumnName="sessionId" />
           <ScalarProperty Name="empNo" ColumnName="empNo" />
+          <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
         </MappingFragment>
       </EntityTypeMapping>
       <EntityTypeMapping TypeName="IsTypeOf(storemodel.Manager)">
@@ -736,7 +734,6 @@
       <EntityTypeMapping TypeName="IsTypeOf(storemodel.RequestItem)">
         <MappingFragment StoreEntitySet="RequestItems">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="empId" ColumnName="empId" />
           <ScalarProperty Name="qty" ColumnName="qty" />
           <ScalarProperty Name="productDesc" ColumnName="productDesc" />
           <ScalarProperty Name="productCat" ColumnName="productCat" />

@@ -20,5 +20,10 @@ namespace storemanagement.DAL
         {
             db.RequestItems.Add(request);
         }
+
+        public List<Request> GetAllRequest()
+        {
+            return db.Requests.ToList();
+        }
     }
 }

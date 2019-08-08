@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using storemanagement.Models;
 using storemanagement.Models.DTO;
@@ -16,22 +12,22 @@ namespace storemanagement.Controllers
 {
     public class CartController : Controller
     {
-        private ProductDAL db = new ProductDAL();
-        private UserDAL user = new UserDAL();
-        private RequestDal requestdal = new RequestDal();
-        private RequestDetailsContext detailContext = new RequestDetailsContext();
+        private readonly ProductDAL db = new ProductDAL();
+        private readonly UserDAL user = new UserDAL();
+        private readonly RequestDal requestdal = new RequestDal();
+        private readonly RequestDetailsContext detailContext = new RequestDetailsContext();
 
         // GET: Cart
-        public  ActionResult Index()
+        public ActionResult Index()
         {
-           
+
             var cart = Session["cart"] as List<RequisitionDTO> ?? new List<RequisitionDTO>();
 
-          
+
             if (cart.Count == 0 || Session["cart"] == null)
             {
                 ViewBag.Message = "Your cart is empty.";
-               
+
                 return View();
             }
 
@@ -52,12 +48,12 @@ namespace storemanagement.Controllers
 
             RequisitionDTO request = new RequisitionDTO();
             int qty = 0;
-    
+
             if (Session["cart"] != null)
             {
                 var list = (List<RequisitionDTO>)Session["cart"];
 
-          
+
                 foreach (var item in list)
                 {
                     qty += item.Qty;
@@ -74,13 +70,13 @@ namespace storemanagement.Controllers
 
         public ActionResult AddToCart(int id)
         {
-          //POst cart
+            //POst cart
             List<RequisitionDTO> cart = Session["cart"] as List<RequisitionDTO> ?? new List<RequisitionDTO>();
-      
+
 
             // Init CartVM
             RequisitionDTO model = new RequisitionDTO();
-           
+
 
             // Get the product
             Product product = db.Find(id);
@@ -97,14 +93,14 @@ namespace storemanagement.Controllers
                     ProductDescription = product.Description,
                     Metric = product.Unit.name,
                     Qty = 1,
-                  
+
                 });
             }
             else
             {
                 // If it is, increment
                 productInCart.Qty++;
-          
+
             }
 
 
@@ -131,17 +127,17 @@ namespace storemanagement.Controllers
         {
             List<RequisitionDTO> cart = Session["cart"] as List<RequisitionDTO>;
 
-             RequisitionDTO item = cart.FirstOrDefault(x => x.ProductId == productId);
+            RequisitionDTO item = cart.FirstOrDefault(x => x.ProductId == productId);
 
-             if (item != null)
-             {
-                 item.Qty++;
+            if (item != null)
+            {
+                item.Qty++;
             }
-             
-            var result = new {qty = item.Qty};
+
+            var result = new { qty = item.Qty };
 
             return Json(result, JsonRequestBehavior.AllowGet);
-            
+
         }
 
         //Produce decrement
@@ -161,7 +157,7 @@ namespace storemanagement.Controllers
                 cart.Remove(item);
             }
 
-            var result = new {qty = item.Qty};
+            var result = new { qty = item.Qty };
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -187,7 +183,7 @@ namespace storemanagement.Controllers
             Employee emp = user.FindBySessionId(guid);
 
             string dept = user.DeptName(emp);
-            string empDeptHeadName = emp.Department.dept_head;
+            int empDeptHeadName = emp.Department.dept_head;
             Request requestDetails = new Request();
 
             detailContext.Add(requestDetails);
@@ -203,8 +199,11 @@ namespace storemanagement.Controllers
             };
 
 
-            client.Send("admin@logicUniveristy.com", $"{empDeptHeadName}", $"New request from {emp.name} OrderId: {requestDetails.Id}", "A request has been made for stationary purchase. Please log in ");
+            client.Send("admin@logicUniveristy.com", $"{empDeptHeadName}",
+                        $"New request from {emp.name} OrderId: {requestDetails.Id}",
+                         "A request has been made for stationary purchase. Please log in to approve request");
 
+            //empty cart
             Session["cart"] = null;
 
         }
@@ -224,7 +223,7 @@ namespace storemanagement.Controllers
 
         public void AddItemsToRequest(RequestItem list, List<RequisitionDTO> cart, Request request, Employee emp)
         {
-           
+
 
             foreach (var item in cart)
             {

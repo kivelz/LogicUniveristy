@@ -25,14 +25,14 @@ namespace storemanagement.Models
         public string email { get; set; }
         public int phone { get; set; }
         public string password { get; set; }
-        public int DepartmentId { get; set; }
         public int RoleId { get; set; }
         public Nullable<System.Guid> sessionId { get; set; }
         public int empNo { get; set; }
+        public int DepartmentId { get; set; }
     
-        public virtual Department Department { get; set; }
         public virtual Role Role { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Request> Requests { get; set; }
+        public virtual Department Department { get; set; }
     }
 }

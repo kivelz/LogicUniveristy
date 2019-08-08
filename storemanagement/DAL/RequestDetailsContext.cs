@@ -20,5 +20,10 @@ namespace storemanagement.DAL
         {
             db.SaveChanges();
         }
+
+        public List<RequestItem> GetAllRequestItem()
+        {
+            return db.RequestItems.ToList();
+        }
     }
 }
