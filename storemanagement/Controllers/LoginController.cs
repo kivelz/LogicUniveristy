@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using storemanagement.Models;
 using storemanagement.DAL;
@@ -19,9 +20,9 @@ namespace storemanagement.Controllers
 
 
         [HttpPost]
-        public ActionResult Index(Employee model)
+        public async Task<ActionResult> Index(Employee model)
         {
-            var userDetails = db.EmployeeDetails(model);
+            Employee emp = await db.EmployeeDetails(model);
           
 
             if (!ModelState.IsValid)
@@ -31,10 +32,10 @@ namespace storemanagement.Controllers
 
             model.password = Crypto.Hash(model.password);
 
-            if(userDetails != null)
+            if(emp != null)
             {
-                userDetails.sessionId = Guid.NewGuid();
-                Session["UserId"] = userDetails.sessionId;
+                emp.sessionId = Guid.NewGuid();
+                Session["UserId"] = emp.sessionId;
                 db.Save(model);
                 return RedirectToAction("Category", "Stationary");
                 
