@@ -40,15 +40,15 @@ namespace storemanagement.DAL
 
         public async Task<string> DeptName(Employee emp)
         {
-            emp = db.Employees.FirstOrDefault(x => x.Department.dept_name == emp.Department.dept_name);
+            emp = await db.Employees.FirstOrDefaultAsync(x => x.Department.dept_name == emp.Department.dept_name);
             string dName = emp.Department.dept_name;
-            return await Task.FromResult(dName);
+            return dName;
         }
 
         public async Task<Employee> FindBySessionId(Guid guid)
         {
-            Employee emp =  db.Employees.FirstOrDefault(x => x.sessionId == guid);
-            return await Task.FromResult(emp);;
+            Employee emp = await db.Employees.Where(x => x.sessionId == guid).FirstOrDefaultAsync();
+            return emp;
         }
     }
 }

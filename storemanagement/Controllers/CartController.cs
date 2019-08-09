@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using storemanagement.Models;
 using storemanagement.Models.DTO;
@@ -173,39 +174,42 @@ namespace storemanagement.Controllers
         }
 
         [HttpPost]
-        public async void RequestOrder()
+        public async Task<ActionResult> RequestOrder()
         {
             List<RequisitionDTO> cart = Session["cart"] as List<RequisitionDTO>;
 
-            RequestItem requester = new RequestItem();
+            RequestItem list = new RequestItem();
 
             Guid guid = (Guid)Session["UserId"];
             Employee emp = await user.FindBySessionId(guid);
 
             string dept = await user.DeptName(emp);
+            //for email
             int empDeptHeadName = emp.Department.dept_head;
             Request requestDetails = new Request();
 
-            detailContext.Add(requestDetails);
-            detailContext.Save(requestDetails);
-
+            
+            
             AddToRequest(requestDetails, dept, emp);
-            AddItemsToRequest(requester, cart, requestDetails, emp);
-
-            var client = new SmtpClient("hotmail.com", 2525)
-            {
-                Credentials = new NetworkCredential("21f57cbb94cf88", "e9d7055c69f02d"),
-                EnableSsl = true
-            };
+            AddItemsToRequest(list, cart, requestDetails, emp);
 
 
-            client.Send("admin@logicUniveristy.com", $"{empDeptHeadName}",
-                        $"New request from {emp.name} OrderId: {requestDetails.Id}",
-                         "A request has been made for stationary purchase. Please log in to approve request");
+           
+
+//            var client = new SmtpClient("hotmail.com", 2525)
+//            {
+//                Credentials = new NetworkCredential("21f57cbb94cf88", "e9d7055c69f02d"),
+//                EnableSsl = true
+//            };
+//
+//
+//            client.Send("admin@logicUniveristy.com", $"{empDeptHeadName}",
+//                        $"New request from {emp.name} OrderId: {requestDetails.Id}",
+//                         "A request has been made for stationary purchase. Please log in to approve request");
 
             //empty cart
             Session["cart"] = null;
-
+            return RedirectToAction("Category", "Stationary");
         }
 
         public void AddToRequest(Request requestDetails, string dept, Employee emp)
@@ -221,12 +225,11 @@ namespace storemanagement.Controllers
 
             detailContext.Add(requestDetails);
             detailContext.Save(requestDetails);
+
         }
 
         public void AddItemsToRequest(RequestItem list, List<RequisitionDTO> cart, Request request, Employee emp)
         {
-
-
             foreach (var item in cart)
             {
                 list.EmployeeId = emp.Id;
@@ -239,6 +242,7 @@ namespace storemanagement.Controllers
                 requestdal.Add(list);
                 requestdal.Save(list);
             }
+
         }
 
     }

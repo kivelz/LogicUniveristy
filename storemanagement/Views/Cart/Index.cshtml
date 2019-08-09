@@ -116,9 +116,6 @@ else
             var $this = $(this);
 
             var url = "/cart/RequestOrder";
-
-            $(".ajaxbg").show();
-
             $.post(url, { }, function (data) {
                 setTimeout(function () {
                     $('form input[name="submit"]').click();
