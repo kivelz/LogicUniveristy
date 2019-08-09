@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using storemanagement.Models;
@@ -37,16 +38,17 @@ namespace storemanagement.DAL
             db.SaveChanges();
         }
 
-        public string DeptName(Employee emp)
+        public async Task<string> DeptName(Employee emp)
         {
             emp = db.Employees.FirstOrDefault(x => x.Department.dept_name == emp.Department.dept_name);
             string dName = emp.Department.dept_name;
-            return dName;
+            return await Task.FromResult(dName);
         }
 
-        public Employee FindBySessionId(Guid guid)
+        public async Task<Employee> FindBySessionId(Guid guid)
         {
-            return db.Employees.FirstOrDefault(x => x.sessionId == guid);
+            Employee emp =  db.Employees.FirstOrDefault(x => x.sessionId == guid);
+            return await Task.FromResult(emp);;
         }
     }
 }

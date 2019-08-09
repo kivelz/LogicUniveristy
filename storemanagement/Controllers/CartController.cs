@@ -173,16 +173,16 @@ namespace storemanagement.Controllers
         }
 
         [HttpPost]
-        public void RequestOrder()
+        public async void RequestOrder()
         {
             List<RequisitionDTO> cart = Session["cart"] as List<RequisitionDTO>;
 
             RequestItem requester = new RequestItem();
 
             Guid guid = (Guid)Session["UserId"];
-            Employee emp = user.FindBySessionId(guid);
+            Employee emp = await user.FindBySessionId(guid);
 
-            string dept = user.DeptName(emp);
+            string dept = await user.DeptName(emp);
             int empDeptHeadName = emp.Department.dept_head;
             Request requestDetails = new Request();
 
