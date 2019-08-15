@@ -1,0 +1,28 @@
+{
+  "name": "logicuniveristy",
+  "version": "1.0.0",
+  "description": "Logic univerity asp.net with react",
+  "main": "app.js",
+  "scripts": {
+    "webpack": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kelvin Tay",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/polyfill": "^7.4.4",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.6"
+  }
+}
