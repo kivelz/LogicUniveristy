@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5b7d6c05cbd9440caafaa6511a8e6f7b" Name="Diagram1">
+        <EntityTypeShape EntityType="TestModel.Category" Width="1.5" PointX="5.25" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestModel.Collection" Width="1.5" PointX="0.75" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestModel.Department" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestModel.Employee" Width="1.5" PointX="5.25" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestModel.Product" Width="1.5" PointX="7.5" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestModel.RequestItem" Width="1.5" PointX="9.75" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestModel.Request" Width="1.5" PointX="7.5" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestModel.Role" Width="1.5" PointX="3" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestModel.Supplier" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestModel.Unit" Width="1.5" PointX="5.25" PointY="14.75" IsExpanded="true" />
+        <AssociationConnector Association="TestModel.FK_ProductCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="TestModel.FK_EmployeeDepartment" ManuallyRouted="false" />
+        <AssociationConnector Association="TestModel.FK_EmployeeRole" ManuallyRouted="false" />
+        <AssociationConnector Association="TestModel.FK_RequestEmployee" ManuallyRouted="false" />
+        <AssociationConnector Association="TestModel.FK_RequestItemEmployee" ManuallyRouted="false" />
+        <AssociationConnector Association="TestModel.FK_RequestItemProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="TestModel.FK_UnitsProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="TestModel.FK_RequestItemRequest" ManuallyRouted="false" />
+        <AssociationConnector Association="TestModel.DepartmentCollection" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
