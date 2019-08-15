@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using storemanagement.Models;
 
@@ -13,27 +11,23 @@ namespace storemanagement.DAL
         private StoreManagement db = new StoreManagement();
 
 
-        public async Task<Category> FindById(int id)
+        public Category FindById(int id)
         {
-            Category cat = await db.Categories.FindAsync(id);
-            return cat;
+            return db.Categories.Find(id);
         }
 
-        public async Task<List<Category>> FindAllProduct()
+        public List<Category> FindAllProduct()
         {
-            List<Category> list = await db.Categories.ToListAsync();
-            return list;
+            return db.Categories.ToList();
         }
-        public async Task<Category> GetByCategory(string name)
+        public Category GetByCategory(string name)
         {
-            Category cat  = await db.Categories.FirstOrDefaultAsync(x => x.Name == name);
-            return cat;
+            return db.Categories.FirstOrDefault(x => x.Name == name);
         }
 
-        public async Task<List<Category>> GetAllCategories()
+        public List<Category> GetAllCategories()
         {
-            List<Category> list = await db.Categories.ToListAsync();
-            return list;
+            return db.Categories.ToList();
         }
         
     }

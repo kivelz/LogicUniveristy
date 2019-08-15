@@ -20,11 +20,11 @@ namespace storemanagement.DAL
         {
             return db.Employees.ToList();
         }
-        public  async Task<Employee> EmployeeDetails(Employee emp)
+        public Employee EmployeeDetails(Employee emp)
         {
-            emp = await  db.Employees.FirstOrDefaultAsync(x => x.email == emp.email && x.password == emp.password);
+            var userDetails = db.Employees.FirstOrDefault(x => x.email == emp.email && x.password == emp.password);
 
-            return emp;
+            return userDetails;
 
         }
         //Find employee id

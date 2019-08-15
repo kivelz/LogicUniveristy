@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using storemanagement.Models;
@@ -22,7 +21,7 @@ namespace storemanagement.Controllers
 
             return View();
         }
-        public async Task<ActionResult> Category(string name)
+        public ActionResult Category(string name)
         {
             if (Session["UserId"] != null)
             {
@@ -31,10 +30,10 @@ namespace storemanagement.Controllers
                 Shop shop;
 
 
-                Category cat = await db.GetByCategory(name);
+                Category cat = db.GetByCategory(name);
                
 
-                categories = await db.GetAllCategories();
+                categories = db.GetAllCategories();
 
                 if (cat == null)
                 {
@@ -48,7 +47,7 @@ namespace storemanagement.Controllers
                     int catId = cat.Id;
                     list = db1.FindById(catId);
 
-                    categories = await db.GetAllCategories();
+                    categories = db.GetAllCategories();
 
                     shop = new Shop {categoryList = categories, productList = list};
 
