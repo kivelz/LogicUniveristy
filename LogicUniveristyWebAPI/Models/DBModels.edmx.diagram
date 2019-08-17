@@ -23,7 +23,7 @@
         <AssociationConnector Association="TestModel.FK_RequestItemProduct" ManuallyRouted="false" />
         <AssociationConnector Association="TestModel.FK_UnitsProduct" ManuallyRouted="false" />
         <AssociationConnector Association="TestModel.FK_RequestItemRequest" ManuallyRouted="false" />
-        <AssociationConnector Association="TestModel.DepartmentCollection" ManuallyRouted="false" />
+        <AssociationConnector Association="TestModel.CollectionDepartment" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

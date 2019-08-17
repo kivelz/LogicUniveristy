@@ -176,9 +176,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\EmployeesController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\StationaryController.cs" />
@@ -191,6 +193,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ApiModel\EmployeeApiModel.cs" />
     <Compile Include="Models\Category.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
@@ -203,14 +206,11 @@
     <Compile Include="Models\Department.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ListOfRequest.cs" />
-    <Compile Include="Models\DTO\RequisitionDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Manager.cs">
-      <DependentUpon>storemodel.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\ListOfRequest.cs" />
+    <Compile Include="Models\DTO\RequisitionDTO.cs" />
     <Compile Include="Models\Product.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
@@ -224,9 +224,6 @@
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Shop.cs" />
-    <Compile Include="Models\StoreClerk.cs">
-      <DependentUpon>storemodel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\storemodel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -242,8 +239,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>storemodel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\Supervisor.cs">
-      <DependentUpon>storemodel.tt</DependentUpon>
+    <Compile Include="Models\storemodel1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>storemodel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Supplier.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
@@ -277,7 +276,7 @@
     </Content>
     <EntityDeploy Include="Models\storemodel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>storemodel.Designer.cs</LastGenOutput>
+      <LastGenOutput>storemodel1.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <Content Include="Models\storemodel.edmx.diagram">
       <DependentUpon>storemodel.edmx</DependentUpon>

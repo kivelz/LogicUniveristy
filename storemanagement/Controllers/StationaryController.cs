@@ -44,7 +44,7 @@ namespace storemanagement.Controllers
                 }
                 else
                 {
-                    int catId = cat.Id;
+                    int catId = cat.CatId;
                     list = db1.FindById(catId);
 
                     categories = db.GetAllCategories();

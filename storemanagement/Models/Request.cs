@@ -14,7 +14,7 @@ namespace storemanagement.Models
     
     public partial class Request
     {
-        public int Id { get; set; }
+        public int RequestId { get; set; }
         public System.DateTime createdAt { get; set; }
         public string remarks { get; set; }
         public string status { get; set; }

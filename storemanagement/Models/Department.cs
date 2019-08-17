@@ -17,20 +17,19 @@ namespace storemanagement.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Department()
         {
-            this.Collections = new HashSet<Collection>();
             this.Employees = new HashSet<Employee>();
         }
     
-        public int Id { get; set; }
+        public int DeptId { get; set; }
         public string dept_name { get; set; }
         public string contact_name { get; set; }
         public int phone { get; set; }
         public int fax { get; set; }
-        public int dept_head { get; set; }
+        public int Dept_head { get; set; }
+        public int CollectionId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Collection> Collections { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Employee> Employees { get; set; }
+        public virtual Collection Collection { get; set; }
     }
 }

@@ -14,16 +14,19 @@ namespace storemanagement.Models
     
     public partial class Product
     {
-        public int Id { get; set; }
+        public int ProductId { get; set; }
         public string item_code { get; set; }
         public string Description { get; set; }
-        public int CategoryId { get; set; }
         public int reorderLvl { get; set; }
         public int reorderQty { get; set; }
         public int balance { get; set; }
-        public int UnitsId { get; set; }
         public double price { get; set; }
+        public Nullable<int> SupplierId { get; set; }
+        public int CategoryId { get; set; }
+        public int UnitsId { get; set; }
     
+        public virtual Supplier Supplier { get; set; }
+        public virtual Category Category { get; set; }
         public virtual Units Unit { get; set; }
     }
 }

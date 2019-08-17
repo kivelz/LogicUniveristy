@@ -89,7 +89,7 @@ namespace storemanagement.Controllers
             {
                 cart.Add(new RequisitionDTO()
                 {
-                    ProductId = product.Id,
+                    ProductId = product.ProductId,
                     ProductCode = product.item_code,
                     ProductDescription = product.Description,
                     Metric = product.Unit.name,
@@ -185,7 +185,7 @@ namespace storemanagement.Controllers
 
             string dept = await user.DeptName(emp);
             //for email
-            int empDeptHeadName = emp.Department.dept_head;
+            int empDeptHeadName = emp.Department.Dept_head;
             Request requestDetails = new Request();
 
             
@@ -221,7 +221,7 @@ namespace storemanagement.Controllers
             requestDetails.status = "Pending";
             requestDetails.approvalDate = DateTime.Now;
             requestDetails.createdAt = DateTime.Now;
-            requestDetails.EmployeeId = emp.Id;
+            requestDetails.EmployeeId = emp.EmployeeId;
 
             detailContext.Add(requestDetails);
             detailContext.Save(requestDetails);
@@ -232,8 +232,8 @@ namespace storemanagement.Controllers
         {
             foreach (var item in cart)
             {
-                list.EmployeeId = emp.Id;
-                list.RequestId = request.Id;
+                list.EmployeeId = emp.EmployeeId;
+                list.RequestId = request.RequestId;
                 list.ProductId = item.ProductId;
                 list.productCat = item.ProductCode;
                 list.productDesc = item.ProductDescription;

@@ -14,11 +14,21 @@ namespace storemanagement.Models
     
     public partial class Supplier
     {
-        public int Id { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Supplier()
+        {
+            this.Products = new HashSet<Product>();
+        }
+    
+        public int SupplierId { get; set; }
         public string code { get; set; }
         public string name { get; set; }
         public int contact { get; set; }
         public int fax { get; set; }
         public string address { get; set; }
+        public Nullable<int> ProductId { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Product> Products { get; set; }
     }
 }

@@ -18,7 +18,6 @@ namespace LogicUniveristyWebAPI.Models
         public Department()
         {
             this.Employees = new HashSet<Employee>();
-            this.Collections = new HashSet<Collection>();
         }
     
         public int Id { get; set; }
@@ -27,10 +26,10 @@ namespace LogicUniveristyWebAPI.Models
         public int phone { get; set; }
         public int fax { get; set; }
         public int dept_head { get; set; }
+        public int CollectionId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Employee> Employees { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Collection> Collections { get; set; }
+        public virtual Collection Collection { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 08/09/2019 21:10:45
+-- Date Created: 08/16/2019 15:54:04
 -- Generated from EDMX file: C:\Users\kivel\source\repos\storemanagement\storemanagement\Models\storemodel.edmx
 -- --------------------------------------------------
 
@@ -17,21 +17,6 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
-IF OBJECT_ID(N'[dbo].[FK_ProductCategory]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Products] DROP CONSTRAINT [FK_ProductCategory];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UnitsProduct]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Products] DROP CONSTRAINT [FK_UnitsProduct];
-GO
-IF OBJECT_ID(N'[dbo].[FK_EmployeeRole]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Employees] DROP CONSTRAINT [FK_EmployeeRole];
-GO
-IF OBJECT_ID(N'[dbo].[FK_DepartmentCollection_Department]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[DepartmentCollection] DROP CONSTRAINT [FK_DepartmentCollection_Department];
-GO
-IF OBJECT_ID(N'[dbo].[FK_DepartmentCollection_Collection]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[DepartmentCollection] DROP CONSTRAINT [FK_DepartmentCollection_Collection];
-GO
 IF OBJECT_ID(N'[dbo].[FK_RequestItemProduct]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[RequestItems] DROP CONSTRAINT [FK_RequestItemProduct];
 GO
@@ -44,17 +29,23 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_RequestEmployee]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Requests] DROP CONSTRAINT [FK_RequestEmployee];
 GO
-IF OBJECT_ID(N'[dbo].[FK_EmployeeDepartment]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Employees] DROP CONSTRAINT [FK_EmployeeDepartment];
+IF OBJECT_ID(N'[dbo].[FK_ProductSupplier]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Products] DROP CONSTRAINT [FK_ProductSupplier];
 GO
-IF OBJECT_ID(N'[dbo].[FK_Manager_inherits_Employee]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Employees_Manager] DROP CONSTRAINT [FK_Manager_inherits_Employee];
+IF OBJECT_ID(N'[dbo].[FK_CategoryProduct]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Products] DROP CONSTRAINT [FK_CategoryProduct];
 GO
-IF OBJECT_ID(N'[dbo].[FK_StoreClerk_inherits_Employee]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Employees_StoreClerk] DROP CONSTRAINT [FK_StoreClerk_inherits_Employee];
+IF OBJECT_ID(N'[dbo].[FK_DepartmentEmployee]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Employees] DROP CONSTRAINT [FK_DepartmentEmployee];
 GO
-IF OBJECT_ID(N'[dbo].[FK_Supervisor_inherits_Employee]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Employees_Supervisor] DROP CONSTRAINT [FK_Supervisor_inherits_Employee];
+IF OBJECT_ID(N'[dbo].[FK_UnitsProduct]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Products] DROP CONSTRAINT [FK_UnitsProduct];
+GO
+IF OBJECT_ID(N'[dbo].[FK_CollectionDepartment]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Departments] DROP CONSTRAINT [FK_CollectionDepartment];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RoleEmployee]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Employees] DROP CONSTRAINT [FK_RoleEmployee];
 GO
 
 -- --------------------------------------------------
@@ -85,23 +76,11 @@ GO
 IF OBJECT_ID(N'[dbo].[Units]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Units];
 GO
-IF OBJECT_ID(N'[dbo].[Roles]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Roles];
-GO
 IF OBJECT_ID(N'[dbo].[Requests]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Requests];
 GO
-IF OBJECT_ID(N'[dbo].[Employees_Manager]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Employees_Manager];
-GO
-IF OBJECT_ID(N'[dbo].[Employees_StoreClerk]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Employees_StoreClerk];
-GO
-IF OBJECT_ID(N'[dbo].[Employees_Supervisor]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Employees_Supervisor];
-GO
-IF OBJECT_ID(N'[dbo].[DepartmentCollection]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[DepartmentCollection];
+IF OBJECT_ID(N'[dbo].[Roles]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Roles];
 GO
 
 -- --------------------------------------------------
@@ -110,43 +89,46 @@ GO
 
 -- Creating table 'Suppliers'
 CREATE TABLE [dbo].[Suppliers] (
-    [Id] int IDENTITY(1,1) NOT NULL,
+    [SupplierId] int IDENTITY(1,1) NOT NULL,
     [code] nvarchar(max)  NOT NULL,
     [name] nvarchar(max)  NOT NULL,
     [contact] int  NOT NULL,
     [fax] int  NOT NULL,
-    [address] nvarchar(max)  NOT NULL
+    [address] nvarchar(max)  NOT NULL,
+    [ProductId] int  NULL
 );
 GO
 
 -- Creating table 'Departments'
 CREATE TABLE [dbo].[Departments] (
-    [Id] int IDENTITY(1,1) NOT NULL,
+    [DeptId] int IDENTITY(1,1) NOT NULL,
     [dept_name] nvarchar(max)  NOT NULL,
     [contact_name] nvarchar(max)  NOT NULL,
     [phone] int  NOT NULL,
     [fax] int  NOT NULL,
-    [dept_head] int  NOT NULL
+    [Dept_head] int  NOT NULL,
+    [CollectionId] int  NOT NULL
 );
 GO
 
 -- Creating table 'Products'
 CREATE TABLE [dbo].[Products] (
-    [Id] int IDENTITY(1,1) NOT NULL,
+    [ProductId] int IDENTITY(1,1) NOT NULL,
     [item_code] nvarchar(max)  NOT NULL,
     [Description] nvarchar(max)  NOT NULL,
-    [CategoryId] int  NOT NULL,
     [reorderLvl] int  NOT NULL,
     [reorderQty] int  NOT NULL,
     [balance] int  NOT NULL,
-    [UnitsId] int  NOT NULL,
-    [price] float  NOT NULL
+    [price] float  NOT NULL,
+    [SupplierId] int  NULL,
+    [CategoryId] int  NOT NULL,
+    [UnitsId] int  NOT NULL
 );
 GO
 
 -- Creating table 'Categories'
 CREATE TABLE [dbo].[Categories] (
-    [Id] int IDENTITY(1,1) NOT NULL,
+    [CatId] int IDENTITY(1,1) NOT NULL,
     [Name] nvarchar(max)  NOT NULL
 );
 GO
@@ -160,21 +142,22 @@ GO
 
 -- Creating table 'Employees'
 CREATE TABLE [dbo].[Employees] (
-    [Id] int IDENTITY(1,1) NOT NULL,
+    [EmployeeId] int IDENTITY(1,1) NOT NULL,
     [name] nvarchar(max)  NOT NULL,
     [email] nvarchar(max)  NOT NULL,
     [phone] int  NOT NULL,
     [password] nvarchar(max)  NOT NULL,
-    [RoleId] int  NOT NULL,
     [sessionId] uniqueidentifier  NULL,
     [empNo] int  NOT NULL,
-    [DepartmentId] int  NOT NULL
+    [DepartmentId] int  NOT NULL,
+    [RoleId] int  NOT NULL,
+    [MgrId] int  NULL
 );
 GO
 
 -- Creating table 'RequestItems'
 CREATE TABLE [dbo].[RequestItems] (
-    [Id] int IDENTITY(1,1) NOT NULL,
+    [ItemRequestId] int IDENTITY(1,1) NOT NULL,
     [qty] int  NOT NULL,
     [productDesc] nvarchar(max)  NOT NULL,
     [productCat] nvarchar(max)  NOT NULL,
@@ -192,16 +175,9 @@ CREATE TABLE [dbo].[Units] (
 );
 GO
 
--- Creating table 'Roles'
-CREATE TABLE [dbo].[Roles] (
-    [Id] int IDENTITY(1,1) NOT NULL,
-    [roleName] nvarchar(max)  NOT NULL
-);
-GO
-
 -- Creating table 'Requests'
 CREATE TABLE [dbo].[Requests] (
-    [Id] int IDENTITY(1,1) NOT NULL,
+    [RequestId] int IDENTITY(1,1) NOT NULL,
     [createdAt] datetime  NOT NULL,
     [remarks] nvarchar(max)  NOT NULL,
     [status] nvarchar(max)  NOT NULL,
@@ -213,28 +189,10 @@ CREATE TABLE [dbo].[Requests] (
 );
 GO
 
--- Creating table 'Employees_Manager'
-CREATE TABLE [dbo].[Employees_Manager] (
-    [Id] int  NOT NULL
-);
-GO
-
--- Creating table 'Employees_StoreClerk'
-CREATE TABLE [dbo].[Employees_StoreClerk] (
-    [Id] int  NOT NULL
-);
-GO
-
--- Creating table 'Employees_Supervisor'
-CREATE TABLE [dbo].[Employees_Supervisor] (
-    [Id] int  NOT NULL
-);
-GO
-
--- Creating table 'DepartmentCollection'
-CREATE TABLE [dbo].[DepartmentCollection] (
-    [Departments_Id] int  NOT NULL,
-    [Collections_Id] int  NOT NULL
+-- Creating table 'Roles'
+CREATE TABLE [dbo].[Roles] (
+    [RoleId] int IDENTITY(1,1) NOT NULL,
+    [Title] nvarchar(max)  NOT NULL
 );
 GO
 
@@ -242,28 +200,28 @@ GO
 -- Creating all PRIMARY KEY constraints
 -- --------------------------------------------------
 
--- Creating primary key on [Id] in table 'Suppliers'
+-- Creating primary key on [SupplierId] in table 'Suppliers'
 ALTER TABLE [dbo].[Suppliers]
 ADD CONSTRAINT [PK_Suppliers]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
+    PRIMARY KEY CLUSTERED ([SupplierId] ASC);
 GO
 
--- Creating primary key on [Id] in table 'Departments'
+-- Creating primary key on [DeptId] in table 'Departments'
 ALTER TABLE [dbo].[Departments]
 ADD CONSTRAINT [PK_Departments]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
+    PRIMARY KEY CLUSTERED ([DeptId] ASC);
 GO
 
--- Creating primary key on [Id] in table 'Products'
+-- Creating primary key on [ProductId] in table 'Products'
 ALTER TABLE [dbo].[Products]
 ADD CONSTRAINT [PK_Products]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
+    PRIMARY KEY CLUSTERED ([ProductId] ASC);
 GO
 
--- Creating primary key on [Id] in table 'Categories'
+-- Creating primary key on [CatId] in table 'Categories'
 ALTER TABLE [dbo].[Categories]
 ADD CONSTRAINT [PK_Categories]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
+    PRIMARY KEY CLUSTERED ([CatId] ASC);
 GO
 
 -- Creating primary key on [Id] in table 'Collections'
@@ -272,16 +230,16 @@ ADD CONSTRAINT [PK_Collections]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'Employees'
+-- Creating primary key on [EmployeeId] in table 'Employees'
 ALTER TABLE [dbo].[Employees]
 ADD CONSTRAINT [PK_Employees]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
+    PRIMARY KEY CLUSTERED ([EmployeeId] ASC);
 GO
 
--- Creating primary key on [Id] in table 'RequestItems'
+-- Creating primary key on [ItemRequestId] in table 'RequestItems'
 ALTER TABLE [dbo].[RequestItems]
 ADD CONSTRAINT [PK_RequestItems]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
+    PRIMARY KEY CLUSTERED ([ItemRequestId] ASC);
 GO
 
 -- Creating primary key on [Id] in table 'Units'
@@ -290,59 +248,125 @@ ADD CONSTRAINT [PK_Units]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'Roles'
-ALTER TABLE [dbo].[Roles]
-ADD CONSTRAINT [PK_Roles]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Id] in table 'Requests'
+-- Creating primary key on [RequestId] in table 'Requests'
 ALTER TABLE [dbo].[Requests]
 ADD CONSTRAINT [PK_Requests]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
+    PRIMARY KEY CLUSTERED ([RequestId] ASC);
 GO
 
--- Creating primary key on [Id] in table 'Employees_Manager'
-ALTER TABLE [dbo].[Employees_Manager]
-ADD CONSTRAINT [PK_Employees_Manager]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Id] in table 'Employees_StoreClerk'
-ALTER TABLE [dbo].[Employees_StoreClerk]
-ADD CONSTRAINT [PK_Employees_StoreClerk]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Id] in table 'Employees_Supervisor'
-ALTER TABLE [dbo].[Employees_Supervisor]
-ADD CONSTRAINT [PK_Employees_Supervisor]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Departments_Id], [Collections_Id] in table 'DepartmentCollection'
-ALTER TABLE [dbo].[DepartmentCollection]
-ADD CONSTRAINT [PK_DepartmentCollection]
-    PRIMARY KEY CLUSTERED ([Departments_Id], [Collections_Id] ASC);
+-- Creating primary key on [RoleId] in table 'Roles'
+ALTER TABLE [dbo].[Roles]
+ADD CONSTRAINT [PK_Roles]
+    PRIMARY KEY CLUSTERED ([RoleId] ASC);
 GO
 
 -- --------------------------------------------------
 -- Creating all FOREIGN KEY constraints
 -- --------------------------------------------------
 
--- Creating foreign key on [CategoryId] in table 'Products'
-ALTER TABLE [dbo].[Products]
-ADD CONSTRAINT [FK_ProductCategory]
-    FOREIGN KEY ([CategoryId])
-    REFERENCES [dbo].[Categories]
-        ([Id])
+-- Creating foreign key on [ProductId] in table 'RequestItems'
+ALTER TABLE [dbo].[RequestItems]
+ADD CONSTRAINT [FK_RequestItemProduct]
+    FOREIGN KEY ([ProductId])
+    REFERENCES [dbo].[Products]
+        ([ProductId])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating non-clustered index for FOREIGN KEY 'FK_ProductCategory'
-CREATE INDEX [IX_FK_ProductCategory]
+-- Creating non-clustered index for FOREIGN KEY 'FK_RequestItemProduct'
+CREATE INDEX [IX_FK_RequestItemProduct]
+ON [dbo].[RequestItems]
+    ([ProductId]);
+GO
+
+-- Creating foreign key on [EmployeeId] in table 'RequestItems'
+ALTER TABLE [dbo].[RequestItems]
+ADD CONSTRAINT [FK_RequestItemEmployee]
+    FOREIGN KEY ([EmployeeId])
+    REFERENCES [dbo].[Employees]
+        ([EmployeeId])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_RequestItemEmployee'
+CREATE INDEX [IX_FK_RequestItemEmployee]
+ON [dbo].[RequestItems]
+    ([EmployeeId]);
+GO
+
+-- Creating foreign key on [RequestId] in table 'RequestItems'
+ALTER TABLE [dbo].[RequestItems]
+ADD CONSTRAINT [FK_RequestItemRequest]
+    FOREIGN KEY ([RequestId])
+    REFERENCES [dbo].[Requests]
+        ([RequestId])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_RequestItemRequest'
+CREATE INDEX [IX_FK_RequestItemRequest]
+ON [dbo].[RequestItems]
+    ([RequestId]);
+GO
+
+-- Creating foreign key on [EmployeeId] in table 'Requests'
+ALTER TABLE [dbo].[Requests]
+ADD CONSTRAINT [FK_RequestEmployee]
+    FOREIGN KEY ([EmployeeId])
+    REFERENCES [dbo].[Employees]
+        ([EmployeeId])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_RequestEmployee'
+CREATE INDEX [IX_FK_RequestEmployee]
+ON [dbo].[Requests]
+    ([EmployeeId]);
+GO
+
+-- Creating foreign key on [SupplierId] in table 'Products'
+ALTER TABLE [dbo].[Products]
+ADD CONSTRAINT [FK_ProductSupplier]
+    FOREIGN KEY ([SupplierId])
+    REFERENCES [dbo].[Suppliers]
+        ([SupplierId])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_ProductSupplier'
+CREATE INDEX [IX_FK_ProductSupplier]
+ON [dbo].[Products]
+    ([SupplierId]);
+GO
+
+-- Creating foreign key on [CategoryId] in table 'Products'
+ALTER TABLE [dbo].[Products]
+ADD CONSTRAINT [FK_CategoryProduct]
+    FOREIGN KEY ([CategoryId])
+    REFERENCES [dbo].[Categories]
+        ([CatId])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_CategoryProduct'
+CREATE INDEX [IX_FK_CategoryProduct]
 ON [dbo].[Products]
     ([CategoryId]);
+GO
+
+-- Creating foreign key on [DepartmentId] in table 'Employees'
+ALTER TABLE [dbo].[Employees]
+ADD CONSTRAINT [FK_DepartmentEmployee]
+    FOREIGN KEY ([DepartmentId])
+    REFERENCES [dbo].[Departments]
+        ([DeptId])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_DepartmentEmployee'
+CREATE INDEX [IX_FK_DepartmentEmployee]
+ON [dbo].[Employees]
+    ([DepartmentId]);
 GO
 
 -- Creating foreign key on [UnitsId] in table 'Products'
@@ -360,145 +384,49 @@ ON [dbo].[Products]
     ([UnitsId]);
 GO
 
--- Creating foreign key on [RoleId] in table 'Employees'
-ALTER TABLE [dbo].[Employees]
-ADD CONSTRAINT [FK_EmployeeRole]
-    FOREIGN KEY ([RoleId])
-    REFERENCES [dbo].[Roles]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_EmployeeRole'
-CREATE INDEX [IX_FK_EmployeeRole]
-ON [dbo].[Employees]
-    ([RoleId]);
-GO
-
--- Creating foreign key on [Departments_Id] in table 'DepartmentCollection'
-ALTER TABLE [dbo].[DepartmentCollection]
-ADD CONSTRAINT [FK_DepartmentCollection_Department]
-    FOREIGN KEY ([Departments_Id])
-    REFERENCES [dbo].[Departments]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating foreign key on [Collections_Id] in table 'DepartmentCollection'
-ALTER TABLE [dbo].[DepartmentCollection]
-ADD CONSTRAINT [FK_DepartmentCollection_Collection]
-    FOREIGN KEY ([Collections_Id])
+-- Creating foreign key on [CollectionId] in table 'Departments'
+ALTER TABLE [dbo].[Departments]
+ADD CONSTRAINT [FK_CollectionDepartment]
+    FOREIGN KEY ([CollectionId])
     REFERENCES [dbo].[Collections]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating non-clustered index for FOREIGN KEY 'FK_DepartmentCollection_Collection'
-CREATE INDEX [IX_FK_DepartmentCollection_Collection]
-ON [dbo].[DepartmentCollection]
-    ([Collections_Id]);
+-- Creating non-clustered index for FOREIGN KEY 'FK_CollectionDepartment'
+CREATE INDEX [IX_FK_CollectionDepartment]
+ON [dbo].[Departments]
+    ([CollectionId]);
 GO
 
--- Creating foreign key on [ProductId] in table 'RequestItems'
-ALTER TABLE [dbo].[RequestItems]
-ADD CONSTRAINT [FK_RequestItemProduct]
-    FOREIGN KEY ([ProductId])
-    REFERENCES [dbo].[Products]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_RequestItemProduct'
-CREATE INDEX [IX_FK_RequestItemProduct]
-ON [dbo].[RequestItems]
-    ([ProductId]);
-GO
-
--- Creating foreign key on [EmployeeId] in table 'RequestItems'
-ALTER TABLE [dbo].[RequestItems]
-ADD CONSTRAINT [FK_RequestItemEmployee]
-    FOREIGN KEY ([EmployeeId])
-    REFERENCES [dbo].[Employees]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_RequestItemEmployee'
-CREATE INDEX [IX_FK_RequestItemEmployee]
-ON [dbo].[RequestItems]
-    ([EmployeeId]);
-GO
-
--- Creating foreign key on [RequestId] in table 'RequestItems'
-ALTER TABLE [dbo].[RequestItems]
-ADD CONSTRAINT [FK_RequestItemRequest]
-    FOREIGN KEY ([RequestId])
-    REFERENCES [dbo].[Requests]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_RequestItemRequest'
-CREATE INDEX [IX_FK_RequestItemRequest]
-ON [dbo].[RequestItems]
-    ([RequestId]);
-GO
-
--- Creating foreign key on [EmployeeId] in table 'Requests'
-ALTER TABLE [dbo].[Requests]
-ADD CONSTRAINT [FK_RequestEmployee]
-    FOREIGN KEY ([EmployeeId])
-    REFERENCES [dbo].[Employees]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_RequestEmployee'
-CREATE INDEX [IX_FK_RequestEmployee]
-ON [dbo].[Requests]
-    ([EmployeeId]);
-GO
-
--- Creating foreign key on [DepartmentId] in table 'Employees'
+-- Creating foreign key on [RoleId] in table 'Employees'
 ALTER TABLE [dbo].[Employees]
-ADD CONSTRAINT [FK_EmployeeDepartment]
-    FOREIGN KEY ([DepartmentId])
-    REFERENCES [dbo].[Departments]
-        ([Id])
+ADD CONSTRAINT [FK_RoleEmployee]
+    FOREIGN KEY ([RoleId])
+    REFERENCES [dbo].[Roles]
+        ([RoleId])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating non-clustered index for FOREIGN KEY 'FK_EmployeeDepartment'
-CREATE INDEX [IX_FK_EmployeeDepartment]
+-- Creating non-clustered index for FOREIGN KEY 'FK_RoleEmployee'
+CREATE INDEX [IX_FK_RoleEmployee]
 ON [dbo].[Employees]
-    ([DepartmentId]);
+    ([RoleId]);
 GO
 
--- Creating foreign key on [Id] in table 'Employees_Manager'
-ALTER TABLE [dbo].[Employees_Manager]
-ADD CONSTRAINT [FK_Manager_inherits_Employee]
-    FOREIGN KEY ([Id])
+-- Creating foreign key on [MgrId] in table 'Employees'
+ALTER TABLE [dbo].[Employees]
+ADD CONSTRAINT [FK_EmployeeEmployee]
+    FOREIGN KEY ([MgrId])
     REFERENCES [dbo].[Employees]
-        ([Id])
-    ON DELETE CASCADE ON UPDATE NO ACTION;
+        ([EmployeeId])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating foreign key on [Id] in table 'Employees_StoreClerk'
-ALTER TABLE [dbo].[Employees_StoreClerk]
-ADD CONSTRAINT [FK_StoreClerk_inherits_Employee]
-    FOREIGN KEY ([Id])
-    REFERENCES [dbo].[Employees]
-        ([Id])
-    ON DELETE CASCADE ON UPDATE NO ACTION;
-GO
-
--- Creating foreign key on [Id] in table 'Employees_Supervisor'
-ALTER TABLE [dbo].[Employees_Supervisor]
-ADD CONSTRAINT [FK_Supervisor_inherits_Employee]
-    FOREIGN KEY ([Id])
-    REFERENCES [dbo].[Employees]
-        ([Id])
-    ON DELETE CASCADE ON UPDATE NO ACTION;
+-- Creating non-clustered index for FOREIGN KEY 'FK_EmployeeEmployee'
+CREATE INDEX [IX_FK_EmployeeEmployee]
+ON [dbo].[Employees]
+    ([MgrId]);
 GO
 
 -- --------------------------------------------------

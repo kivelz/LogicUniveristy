@@ -18,21 +18,26 @@ namespace storemanagement.Models
         public Employee()
         {
             this.Requests = new HashSet<Request>();
+            this.Manager = new HashSet<Employee>();
         }
     
-        public int Id { get; set; }
+        public int EmployeeId { get; set; }
         public string name { get; set; }
         public string email { get; set; }
         public int phone { get; set; }
         public string password { get; set; }
-        public int RoleId { get; set; }
         public Nullable<System.Guid> sessionId { get; set; }
         public int empNo { get; set; }
         public int DepartmentId { get; set; }
+        public int RoleId { get; set; }
+        public Nullable<int> MgrId { get; set; }
     
-        public virtual Role Role { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Request> Requests { get; set; }
         public virtual Department Department { get; set; }
+        public virtual Role Role { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Employee> Manager { get; set; }
+        public virtual Employee Staff { get; set; }
     }
 }

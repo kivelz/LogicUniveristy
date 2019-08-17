@@ -14,7 +14,7 @@ namespace storemanagement.Models
     
     public partial class RequestItem
     {
-        public int Id { get; set; }
+        public int ItemRequestId { get; set; }
         public int qty { get; set; }
         public string productDesc { get; set; }
         public string productCat { get; set; }
