@@ -16,7 +16,7 @@ namespace storemanagement.Controllers
         private readonly ProductDAL db = new ProductDAL();
         private readonly UserDAL user = new UserDAL();
         private readonly RequestDal requestdal = new RequestDal();
-        private readonly RequestDetailsContext detailContext = new RequestDetailsContext();
+        private readonly RequestItemDal detailContext = new RequestItemDal();
 
         // GET: Cart
         public ActionResult Index()
@@ -181,15 +181,15 @@ namespace storemanagement.Controllers
             RequestItem list = new RequestItem();
 
             Guid guid = (Guid)Session["UserId"];
-            Employee emp = await user.FindBySessionId(guid);
-
-            string dept = await user.DeptName(emp);
+          
             //for email
-            int empDeptHeadName = emp.Department.Dept_head;
+//            int empDeptHeadName = emp.Department.Dept_head;
             Request requestDetails = new Request();
 
-            
-            
+            Employee emp = await user.FindBySessionId(guid);
+
+            string dept = user.DeptName(emp);
+
             AddToRequest(requestDetails, dept, emp);
             AddItemsToRequest(list, cart, requestDetails, emp);
 

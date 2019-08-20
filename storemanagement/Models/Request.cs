@@ -14,6 +14,12 @@ namespace storemanagement.Models
     
     public partial class Request
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Request()
+        {
+            this.RequestItems = new HashSet<RequestItem>();
+        }
+    
         public int RequestId { get; set; }
         public System.DateTime createdAt { get; set; }
         public string remarks { get; set; }
@@ -25,5 +31,7 @@ namespace storemanagement.Models
         public int employeeNo { get; set; }
     
         public virtual Employee Employee { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RequestItem> RequestItems { get; set; }
     }
 }

@@ -31,16 +31,16 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-                        <a href="#" class="incrproduct" data-id="@item.Id">+</a>
-                        <a href="#" class="decrproduct" data-id="@item.Id">-</a>
-                        <a href="#" class="removeprod" data-id="@item.Id">Remove</a>
+                        <a href="#" class="incrproduct" data-id="@item.ProductId">+</a>
+                        <a href="#" class="decrproduct" data-id="@item.ProductId">-</a>
+                        <a href="#" class="removeprod" data-id="@item.ProductId">Remove</a>
                     </td>
-                    <td class="qty@(item.Id)">
+                    <td class="qty@(item.ProductId)">
                       0
                     </td>
 
                     <td>
-                        <button onclick="return addToCart({id: @item.Id})">Order</button>
+                        <button onclick="return addToCart({id: @item.ProductId})">Order</button>
                     </td>
 
                 </tr>

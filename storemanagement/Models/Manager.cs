@@ -12,29 +12,16 @@ namespace storemanagement.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Employee
+    public partial class Manager : Employee
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Employee()
+        public Manager()
         {
-            this.Requests = new HashSet<Request>();
+            this.Employees = new HashSet<Employee>();
         }
     
-        public int EmployeeId { get; set; }
-        public string name { get; set; }
-        public string email { get; set; }
-        public int phone { get; set; }
-        public string password { get; set; }
-        public Nullable<System.Guid> sessionId { get; set; }
-        public int empNo { get; set; }
-        public int DepartmentId { get; set; }
-        public int RoleId { get; set; }
-        public Nullable<int> ManagerId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Request> Requests { get; set; }
-        public virtual Department Department { get; set; }
-        public virtual Role Role { get; set; }
-        public virtual Manager ManagerInCharge { get; set; }
+        public virtual ICollection<Employee> Employees { get; set; }
     }
 }

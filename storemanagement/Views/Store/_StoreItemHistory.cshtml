@@ -1,0 +1,21 @@
+﻿@model  List<storemanagement.Models.RequestItem>
+
+@foreach (var prod in @Model)
+{
+    <tr>
+        <td>@prod.Request.createdAt</td>
+        <td>@prod.Request.Employee.name</td>
+        <td>@prod.Request.remarks</td>
+        <td>@prod.Request.deptName</td>
+        <td>@prod.Request.status</td>
+    </tr>
+
+    <tr>
+        <td>@prod.RequestId</td>
+        <td>@prod.ProductId</td>
+        <td>@prod.qty</td>
+        <td>@prod.productCat</td>
+        <td>@prod.productDesc</td>
+        <td>@prod.Employee.name</td>
+    </tr>
+}

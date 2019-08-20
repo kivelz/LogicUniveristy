@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 08/16/2019 15:54:04
+-- Date Created: 08/20/2019 23:37:51
 -- Generated from EDMX file: C:\Users\kivel\source\repos\storemanagement\storemanagement\Models\storemodel.edmx
 -- --------------------------------------------------
 
@@ -22,9 +22,6 @@ IF OBJECT_ID(N'[dbo].[FK_RequestItemProduct]', 'F') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[FK_RequestItemEmployee]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[RequestItems] DROP CONSTRAINT [FK_RequestItemEmployee];
-GO
-IF OBJECT_ID(N'[dbo].[FK_RequestItemRequest]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[RequestItems] DROP CONSTRAINT [FK_RequestItemRequest];
 GO
 IF OBJECT_ID(N'[dbo].[FK_RequestEmployee]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Requests] DROP CONSTRAINT [FK_RequestEmployee];
@@ -46,6 +43,12 @@ IF OBJECT_ID(N'[dbo].[FK_CollectionDepartment]', 'F') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[FK_RoleEmployee]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Employees] DROP CONSTRAINT [FK_RoleEmployee];
+GO
+IF OBJECT_ID(N'[dbo].[FK_RequestRequestItem]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[RequestItems] DROP CONSTRAINT [FK_RequestRequestItem];
+GO
+IF OBJECT_ID(N'[dbo].[FK_Manager_inherits_Employee]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Employees_Manager] DROP CONSTRAINT [FK_Manager_inherits_Employee];
 GO
 
 -- --------------------------------------------------
@@ -81,6 +84,9 @@ IF OBJECT_ID(N'[dbo].[Requests]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[Roles]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Roles];
+GO
+IF OBJECT_ID(N'[dbo].[Employees_Manager]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Employees_Manager];
 GO
 
 -- --------------------------------------------------
@@ -151,7 +157,7 @@ CREATE TABLE [dbo].[Employees] (
     [empNo] int  NOT NULL,
     [DepartmentId] int  NOT NULL,
     [RoleId] int  NOT NULL,
-    [MgrId] int  NULL
+    [ManagerId] int  NULL
 );
 GO
 
@@ -193,6 +199,12 @@ GO
 CREATE TABLE [dbo].[Roles] (
     [RoleId] int IDENTITY(1,1) NOT NULL,
     [Title] nvarchar(max)  NOT NULL
+);
+GO
+
+-- Creating table 'Employees_Manager'
+CREATE TABLE [dbo].[Employees_Manager] (
+    [EmployeeId] int  NOT NULL
 );
 GO
 
@@ -260,6 +272,12 @@ ADD CONSTRAINT [PK_Roles]
     PRIMARY KEY CLUSTERED ([RoleId] ASC);
 GO
 
+-- Creating primary key on [EmployeeId] in table 'Employees_Manager'
+ALTER TABLE [dbo].[Employees_Manager]
+ADD CONSTRAINT [PK_Employees_Manager]
+    PRIMARY KEY CLUSTERED ([EmployeeId] ASC);
+GO
+
 -- --------------------------------------------------
 -- Creating all FOREIGN KEY constraints
 -- --------------------------------------------------
@@ -292,21 +310,6 @@ GO
 CREATE INDEX [IX_FK_RequestItemEmployee]
 ON [dbo].[RequestItems]
     ([EmployeeId]);
-GO
-
--- Creating foreign key on [RequestId] in table 'RequestItems'
-ALTER TABLE [dbo].[RequestItems]
-ADD CONSTRAINT [FK_RequestItemRequest]
-    FOREIGN KEY ([RequestId])
-    REFERENCES [dbo].[Requests]
-        ([RequestId])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_RequestItemRequest'
-CREATE INDEX [IX_FK_RequestItemRequest]
-ON [dbo].[RequestItems]
-    ([RequestId]);
 GO
 
 -- Creating foreign key on [EmployeeId] in table 'Requests'
@@ -414,19 +417,43 @@ ON [dbo].[Employees]
     ([RoleId]);
 GO
 
--- Creating foreign key on [MgrId] in table 'Employees'
+-- Creating foreign key on [RequestId] in table 'RequestItems'
+ALTER TABLE [dbo].[RequestItems]
+ADD CONSTRAINT [FK_RequestRequestItem]
+    FOREIGN KEY ([RequestId])
+    REFERENCES [dbo].[Requests]
+        ([RequestId])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_RequestRequestItem'
+CREATE INDEX [IX_FK_RequestRequestItem]
+ON [dbo].[RequestItems]
+    ([RequestId]);
+GO
+
+-- Creating foreign key on [ManagerId] in table 'Employees'
 ALTER TABLE [dbo].[Employees]
-ADD CONSTRAINT [FK_EmployeeEmployee]
-    FOREIGN KEY ([MgrId])
-    REFERENCES [dbo].[Employees]
+ADD CONSTRAINT [FK_ManagerEmployee]
+    FOREIGN KEY ([ManagerId])
+    REFERENCES [dbo].[Employees_Manager]
         ([EmployeeId])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating non-clustered index for FOREIGN KEY 'FK_EmployeeEmployee'
-CREATE INDEX [IX_FK_EmployeeEmployee]
+-- Creating non-clustered index for FOREIGN KEY 'FK_ManagerEmployee'
+CREATE INDEX [IX_FK_ManagerEmployee]
 ON [dbo].[Employees]
-    ([MgrId]);
+    ([ManagerId]);
+GO
+
+-- Creating foreign key on [EmployeeId] in table 'Employees_Manager'
+ALTER TABLE [dbo].[Employees_Manager]
+ADD CONSTRAINT [FK_Manager_inherits_Employee]
+    FOREIGN KEY ([EmployeeId])
+    REFERENCES [dbo].[Employees]
+        ([EmployeeId])
+    ON DELETE CASCADE ON UPDATE NO ACTION;
 GO
 
 -- --------------------------------------------------

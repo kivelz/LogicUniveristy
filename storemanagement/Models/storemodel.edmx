@@ -16,6 +16,7 @@
     <EntitySet Name="Units" EntityType="storemodel.Store.Units" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Requests" EntityType="storemodel.Store.Requests" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Roles" EntityType="storemodel.Store.Roles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Employees_Manager" EntityType="storemodel.Store.Employees_Manager" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="RequestItemProduct" Association="storemodel.Store.RequestItemProduct">
       <End Role="RequestItem" EntitySet="RequestItems" />
       <End Role="Product" EntitySet="Products" />
@@ -23,10 +24,6 @@
     <AssociationSet Name="RequestItemEmployee" Association="storemodel.Store.RequestItemEmployee">
       <End Role="RequestItem" EntitySet="RequestItems" />
       <End Role="Employee" EntitySet="Employees" />
-    </AssociationSet>
-    <AssociationSet Name="RequestItemRequest" Association="storemodel.Store.RequestItemRequest">
-      <End Role="RequestItem" EntitySet="RequestItems" />
-      <End Role="Request" EntitySet="Requests" />
     </AssociationSet>
     <AssociationSet Name="RequestEmployee" Association="storemodel.Store.RequestEmployee">
       <End Role="Request" EntitySet="Requests" />
@@ -56,9 +53,17 @@
       <End Role="Role" EntitySet="Roles" />
       <End Role="Employee" EntitySet="Employees" />
     </AssociationSet>
-    <AssociationSet Name="EmployeeEmployee" Association="storemodel.Store.EmployeeEmployee">
+    <AssociationSet Name="RequestRequestItem" Association="storemodel.Store.RequestRequestItem">
+      <End Role="Request" EntitySet="Requests" />
+      <End Role="RequestItem" EntitySet="RequestItems" />
+    </AssociationSet>
+    <AssociationSet Name="ManagerEmployee" Association="storemodel.Store.ManagerEmployee">
+      <End Role="Manager" EntitySet="Employees_Manager" />
       <End Role="Employee" EntitySet="Employees" />
-      <End Role="Employee1" EntitySet="Employees" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Manager_inherits_Employee" Association="storemodel.Store.FK_Manager_inherits_Employee">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="Manager" EntitySet="Employees_Manager" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Suppliers">
@@ -127,7 +132,7 @@
     <Property Name="empNo" Type="int" Nullable="false" />
     <Property Name="DepartmentId" Type="int" Nullable="false" />
     <Property Name="RoleId" Type="int" Nullable="false" />
-    <Property Name="MgrId" Type="int" Nullable="true" />
+    <Property Name="ManagerId" Type="int" Nullable="true" />
   </EntityType>
   <EntityType Name="RequestItems">
     <Key>
@@ -170,6 +175,12 @@
     <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
+  <EntityType Name="Employees_Manager">
+    <Key>
+      <PropertyRef Name="EmployeeId" />
+    </Key>
+    <Property Name="EmployeeId" Type="int" Nullable="false" />
+  </EntityType>
   <Association Name="RequestItemProduct">
     <End Role="RequestItem" Type="storemodel.Store.RequestItems" Multiplicity="*" />
     <End Role="Product" Type="storemodel.Store.Products" Multiplicity="1" />
@@ -191,18 +202,6 @@
       </Principal>
       <Dependent Role="RequestItem">
         <PropertyRef Name="EmployeeId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="RequestItemRequest">
-    <End Role="RequestItem" Type="storemodel.Store.RequestItems" Multiplicity="*" />
-    <End Role="Request" Type="storemodel.Store.Requests" Multiplicity="1" />
-    <ReferentialConstraint>
-      <Principal Role="Request">
-        <PropertyRef Name="RequestId" />
-      </Principal>
-      <Dependent Role="RequestItem">
-        <PropertyRef Name="RequestId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -290,15 +289,41 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="EmployeeEmployee">
-    <End Role="Employee" Type="storemodel.Store.Employees" Multiplicity="0..1" />
-    <End Role="Employee1" Type="storemodel.Store.Employees" Multiplicity="*" />
+  <Association Name="RequestRequestItem">
+    <End Role="Request" Type="storemodel.Store.Requests" Multiplicity="1" />
+    <End Role="RequestItem" Type="storemodel.Store.RequestItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Request">
+        <PropertyRef Name="RequestId" />
+      </Principal>
+      <Dependent Role="RequestItem">
+        <PropertyRef Name="RequestId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ManagerEmployee">
+    <End Role="Manager" Type="storemodel.Store.Employees_Manager" Multiplicity="0..1" />
+    <End Role="Employee" Type="storemodel.Store.Employees" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Manager">
+        <PropertyRef Name="EmployeeId" />
+      </Principal>
+      <Dependent Role="Employee">
+        <PropertyRef Name="ManagerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Manager_inherits_Employee">
+    <End Role="Employee" Type="storemodel.Store.Employees" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Manager" Type="storemodel.Store.Employees_Manager" Multiplicity="0..1" />
     <ReferentialConstraint>
       <Principal Role="Employee">
         <PropertyRef Name="EmployeeId" />
       </Principal>
-      <Dependent Role="Employee1">
-        <PropertyRef Name="MgrId" />
+      <Dependent Role="Manager">
+        <PropertyRef Name="EmployeeId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -323,10 +348,6 @@
           <AssociationSet Name="RequestItemEmployee" Association="storemodel.RequestItemEmployee">
             <End Role="RequestItem" EntitySet="RequestItems" />
             <End Role="Employee" EntitySet="Employees" />
-          </AssociationSet>
-          <AssociationSet Name="RequestItemRequest" Association="storemodel.RequestItemRequest">
-            <End Role="RequestItem" EntitySet="RequestItems" />
-            <End Role="Request" EntitySet="Requests" />
           </AssociationSet>
           <AssociationSet Name="RequestEmployee" Association="storemodel.RequestEmployee">
             <End Role="Request" EntitySet="Requests" />
@@ -357,9 +378,13 @@
             <End Role="Role" EntitySet="Roles" />
             <End Role="Employee" EntitySet="Employees" />
           </AssociationSet>
-          <AssociationSet Name="EmployeeEmployee" Association="storemodel.EmployeeEmployee">
+          <AssociationSet Name="RequestRequestItem" Association="storemodel.RequestRequestItem">
+            <End Role="Request" EntitySet="Requests" />
+            <End Role="RequestItem" EntitySet="RequestItems" />
+          </AssociationSet>
+          <AssociationSet Name="ManagerEmployee" Association="storemodel.ManagerEmployee">
+            <End Role="Manager" EntitySet="Employees" />
             <End Role="Employee" EntitySet="Employees" />
-            <End Role="Employee1" EntitySet="Employees" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="Supplier">
@@ -395,7 +420,7 @@
           </Key>
           <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="item_code" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" Nullable="false" Unicode="true" FixedLength="false" MaxLength="Max" />
           <Property Name="reorderLvl" Type="Int32" Nullable="false" />
           <Property Name="reorderQty" Type="Int32" Nullable="false" />
           <Property Name="balance" Type="Int32" Nullable="false" />
@@ -423,9 +448,8 @@
           <Property Name="DepartmentId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Role" Relationship="storemodel.RoleEmployee" FromRole="Employee" ToRole="Role" />
           <Property Name="RoleId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Manager" Relationship="storemodel.EmployeeEmployee" FromRole="Employee" ToRole="Employee1" />
-          <NavigationProperty Name="Staff" Relationship="storemodel.EmployeeEmployee" FromRole="Employee1" ToRole="Employee" />
-          <Property Name="MgrId" Type="Int32" Nullable="true" />
+          <NavigationProperty Name="ManagerInCharge" Relationship="storemodel.ManagerEmployee" FromRole="Employee" ToRole="Manager" />
+          <Property Name="ManagerId" Type="Int32" Nullable="true" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -458,7 +482,7 @@
           <Property Name="ProductId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Employee" Relationship="storemodel.RequestItemEmployee" FromRole="RequestItem" ToRole="Employee" />
           <Property Name="EmployeeId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Request" Relationship="storemodel.RequestItemRequest" FromRole="RequestItem" ToRole="Request" />
+          <NavigationProperty Name="Request" Relationship="storemodel.RequestRequestItem" FromRole="RequestItem" ToRole="Request" />
           <Property Name="RequestId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Units">
@@ -470,7 +494,7 @@
           <Property Name="qty" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Products" Relationship="storemodel.UnitsProduct" FromRole="Units" ToRole="Product" />
         </EntityType>
-        <EntityType Name="Request">
+        <EntityType Name="Request" Abstract="false">
           <Key>
             <PropertyRef Name="RequestId" />
           </Key>
@@ -484,6 +508,7 @@
           <Property Name="EmployeeId" Type="Int32" Nullable="false" />
           <Property Name="employeeName" Type="String" Nullable="false" />
           <Property Name="employeeNo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="RequestItems" Relationship="storemodel.RequestRequestItem" FromRole="Request" ToRole="RequestItem" />
         </EntityType>
         <Association Name="RequestItemProduct">
           <End Type="storemodel.RequestItem" Multiplicity="*" Role="RequestItem" />
@@ -506,18 +531,6 @@
             </Principal>
             <Dependent Role="RequestItem">
               <PropertyRef Name="EmployeeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="RequestItemRequest">
-          <End Type="storemodel.RequestItem" Role="RequestItem" Multiplicity="*" />
-          <End Type="storemodel.Request" Role="Request" Multiplicity="1" />
-          <ReferentialConstraint>
-            <Principal Role="Request">
-              <PropertyRef Name="RequestId" />
-            </Principal>
-            <Dependent Role="RequestItem">
-              <PropertyRef Name="RequestId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -613,15 +626,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="EmployeeEmployee">
-          <End Type="storemodel.Employee" Role="Employee" Multiplicity="0..1" />
-          <End Type="storemodel.Employee" Role="Employee1" Multiplicity="*" />
+        <Association Name="RequestRequestItem">
+          <End Type="storemodel.Request" Role="Request" Multiplicity="1" />
+          <End Type="storemodel.RequestItem" Role="RequestItem" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Employee">
+            <Principal Role="Request">
+              <PropertyRef Name="RequestId" />
+            </Principal>
+            <Dependent Role="RequestItem">
+              <PropertyRef Name="RequestId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Manager" BaseType="storemodel.Employee">
+          <NavigationProperty Name="Employees" Relationship="storemodel.ManagerEmployee" FromRole="Manager" ToRole="Employee" />
+        </EntityType>
+        <Association Name="ManagerEmployee">
+          <End Type="storemodel.Manager" Role="Manager" Multiplicity="0..1" />
+          <End Type="storemodel.Employee" Role="Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Manager">
               <PropertyRef Name="EmployeeId" />
             </Principal>
-            <Dependent Role="Employee1">
-              <PropertyRef Name="MgrId" />
+            <Dependent Role="Employee">
+              <PropertyRef Name="ManagerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -701,7 +729,12 @@
           <ScalarProperty Name="empNo" ColumnName="empNo" />
           <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
           <ScalarProperty Name="RoleId" ColumnName="RoleId" />
-          <ScalarProperty Name="MgrId" ColumnName="MgrId" />
+          <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(storemodel.Manager)">
+        <MappingFragment StoreEntitySet="Employees_Manager">
+          <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

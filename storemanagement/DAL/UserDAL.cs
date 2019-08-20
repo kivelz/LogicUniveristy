@@ -33,16 +33,25 @@ namespace storemanagement.DAL
             return db.Employees.Find(id);
         }
 
+        public void SaveMgr(Manager manager)
+        {
+            db.SaveChanges();
+        }
         public void Save(Employee employee)
         {
             db.SaveChanges();
         }
 
-        public async Task<string> DeptName(Employee emp)
+        public void Add(Manager manager)
         {
-            emp = await db.Employees.FirstOrDefaultAsync(x => x.Department.dept_name == emp.Department.dept_name);
-            string dName = emp.Department.dept_name;
-            return dName;
+            db.Employees.Add(manager);
+        }
+
+        public string DeptName(Employee emp)
+        {
+            emp = db.Employees.FirstOrDefault(x => x.Department.dept_name == emp.Department.dept_name);
+            string dept_name = emp.Department.dept_name;
+            return dept_name;
         }
 
         public async Task<Employee> FindBySessionId(Guid guid)

@@ -1,0 +1,124 @@
+﻿@model storemanagement.Models.DTO.DepartmentsRequestDTO
+
+@{
+    ViewBag.Title = "Department";
+}
+
+<h2>Department</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                @foreach (var dept in Model.Departments)
+                {
+                    <div class="list-group-item"><a href="/store/department?deptname=@dept.dept_name">@dept.dept_name</a> </div>
+                    ;
+                }
+            </div>
+           
+        </div>
+       
+        <div class="col">
+            <table class="table">
+                <tr>
+                    <th>
+                        Request Date
+                    </th>
+                    <th>
+                        Employee Name
+                    </th>
+                    <th>
+                        Employee number
+                    </th>
+                    <th>
+                        Department Name
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Remarks
+                    </th>
+                    <th>
+                        Approval Date
+                    </th>
+
+
+                    <th>
+                    </th>
+                    <th></th>
+                </tr>
+                @if (Model.OutstandingRequest != null)
+                {
+                    foreach (var item in Model.OutstandingRequest)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.createdAt)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.employeeName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.employeeNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.deptName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.status)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.remarks)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.approvalDate)
+                            </td>
+
+                        </tr>
+                    }
+                }
+
+                @if (Model.ApprovedRequest != null)
+                {
+                    foreach (var item in Model.ApprovedRequest)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.createdAt)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.employeeName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.employeeNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.deptName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.status)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.remarks)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.approvalDate)
+                            </td>
+
+                        </tr>
+                    }
+                }
+             
+
+            </table>
+
+        </div>
+    </div>
+</div>

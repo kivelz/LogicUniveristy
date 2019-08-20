@@ -185,9 +185,13 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\StationaryController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
+    <Compile Include="DAL\DepartmentDal.cs" />
+    <Compile Include="DAL\PendingRequestDal.cs" />
     <Compile Include="DAL\ProductDAL.cs" />
+    <Compile Include="DAL\RequestApprovedDal.cs" />
     <Compile Include="DAL\RequestDal.cs" />
-    <Compile Include="DAL\RequestDetailsContext.cs" />
+    <Compile Include="DAL\RequestItemDal.cs" />
+    <Compile Include="DAL\RequestOutstandingDal.cs" />
     <Compile Include="DAL\StationaryDAL.cs" />
     <Compile Include="DAL\UserDAL.cs" />
     <Compile Include="Global.asax.cs">
@@ -206,11 +210,15 @@
     <Compile Include="Models\Department.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTO\DepartmentsRequestDTO.cs" />
+    <Compile Include="Models\DTO\UserDTO.cs" />
+    <Compile Include="Models\DTO\RequisitionDTO.cs" />
     <Compile Include="Models\Employee.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ListOfRequest.cs" />
-    <Compile Include="Models\DTO\RequisitionDTO.cs" />
+    <Compile Include="Models\Manager.cs">
+      <DependentUpon>storemodel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Product.cs">
       <DependentUpon>storemodel.tt</DependentUpon>
     </Compile>
@@ -346,7 +354,6 @@
     <Content Include="Views\Cart\CartPartial.cshtml" />
     <Content Include="Views\Cart\AddToCart.cshtml" />
     <Content Include="Views\Cart\Index.cshtml" />
-    <Content Include="Views\Store\Index.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
     <Content Include="Scripts\umd\popper-utils.min.js.map" />
@@ -356,6 +363,8 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Store\ShowRequestDetails.cshtml" />
+    <Content Include="Views\Store\Department.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -6,7 +6,7 @@ using storemanagement.Models;
 
 namespace storemanagement.DAL
 {
-    public class RequestDetailsContext
+    public class RequestItemDal
     {
         private StoreManagement db = new StoreManagement();
 
@@ -21,9 +21,5 @@ namespace storemanagement.DAL
             db.SaveChanges();
         }
 
-        public List<RequestItem> GetAllRequestItem()
-        {
-            return db.RequestItems.ToList();
-        }
     }
 }

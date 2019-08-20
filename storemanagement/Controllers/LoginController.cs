@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Web.Mvc;
 using storemanagement.Models;
 using storemanagement.DAL;
+using storemanagement.Models.DTO;
 using storemanagement.Ulti;
 
 namespace storemanagement.Controllers
@@ -14,15 +15,14 @@ namespace storemanagement.Controllers
         // GET
         public ActionResult Index()
         {
-            return  View();
+            return View();
         }
 
-
+ 
         [HttpPost]
         public ActionResult Index(Employee model)
         {
             var userDetails = db.EmployeeDetails(model);
-          
 
             if (!ModelState.IsValid)
             {
@@ -31,20 +31,20 @@ namespace storemanagement.Controllers
 
             model.password = Crypto.Hash(model.password);
 
-            if(userDetails != null)
+            if (userDetails != null)
             {
                 userDetails.sessionId = Guid.NewGuid();
                 Session["UserId"] = userDetails.sessionId;
                 db.Save(model);
                 return RedirectToAction("Category", "Stationary");
-                
+
             }
 
-            else 
+            else
             {
                 ModelState.AddModelError("", "Invalid Username or Password");
-            } 
-                   
+            }
+
             return View(model);
         }
     }
